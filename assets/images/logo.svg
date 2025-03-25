@@ -5,32 +5,32 @@
       <stop offset="0%" stop-color="#ffffff" />
       <stop offset="100%" stop-color="#f7f7f7" />
     </linearGradient>
-    
+
     <!-- Élément de débogage/code -->
     <pattern id="code-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
       <rect width="20" height="1" fill="#e5e5e5" y="5" />
       <rect width="20" height="1" fill="#e5e5e5" y="15" />
     </pattern>
   </defs>
-  
+
   <!-- Fond -->
   <rect x="0" y="0" width="200" height="200" fill="url(#bg-gradient)" />
   <rect x="25" y="25" width="150" height="150" fill="url(#code-pattern)" opacity="0.5" />
-  
+
   <!-- Éléments principaux -->
   <g transform="translate(20, 20)">
     <!-- Hexagone principal (représente WordPress) -->
     <path d="M80,25 L120,45 L120,95 L80,115 L40,95 L40,45 Z" fill="#0073aa" fill-opacity="0.9" />
-    
+
     <!-- Cercle interne (représente la partie Debug Toolkit) -->
     <circle cx="80" cy="70" r="30" fill="#ffffff" />
-    
+
     <!-- Symbole de débogage - loupe et bug -->
     <g>
       <!-- Loupe -->
       <circle cx="70" cy="60" r="15" fill="none" stroke="#23282d" stroke-width="3" />
       <line x1="80" y1="70" x2="95" y2="85" stroke="#23282d" stroke-width="4" stroke-linecap="round" />
-      
+
       <!-- Symbole de bug -->
       <circle cx="70" cy="60" r="7" fill="#e74c3c" fill-opacity="0.8" />
       <line x1="70" y1="53" x2="70" y2="50" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" />
@@ -38,23 +38,23 @@
       <line x1="63" y1="60" x2="60" y2="60" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" />
       <line x1="77" y1="60" x2="80" y2="60" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" />
     </g>
-    
+
     <!-- Code et éléments de débogage autour -->
     <g>
       <!-- Brackets -->
       <path d="M25,50 L10,70 L25,90" fill="none" stroke="#23282d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
       <path d="M135,50 L150,70 L135,90" fill="none" stroke="#23282d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-      
+
       <!-- Lignes de code stylisées -->
       <line x1="40" y1="120" x2="70" y2="120" stroke="#23282d" stroke-width="3" stroke-linecap="round" />
       <line x1="80" y1="120" x2="120" y2="120" stroke="#e74c3c" stroke-width="3" stroke-linecap="round" />
-      
+
       <line x1="40" y1="130" x2="60" y2="130" stroke="#23282d" stroke-width="3" stroke-linecap="round" />
       <line x1="70" y1="130" x2="90" y2="130" stroke="#e74c3c" stroke-width="3" stroke-linecap="round" />
       <line x1="100" y1="130" x2="120" y2="130" stroke="#23282d" stroke-width="3" stroke-linecap="round" />
     </g>
   </g>
-  
+
   <!-- Texte -->
   <text x="100" y="170" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#23282d">WP Debug Toolkit</text>
 </svg>

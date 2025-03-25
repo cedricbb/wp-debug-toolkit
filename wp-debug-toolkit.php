@@ -28,7 +28,7 @@ class WP_Debug_Toolkit {
 
     private static $instance = null;
 
-    public static function get_instance() 
+    public static function get_instance()
     {
         if (null(self::$instance)) {
             self::$instance = new self();
@@ -36,7 +36,7 @@ class WP_Debug_Toolkit {
         return self::$instance;
     }
 
-    private function __construct() 
+    private function __construct()
     {
         $this->load_dependencies();
         $this->set_locale();
