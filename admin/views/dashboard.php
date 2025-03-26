@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Récupérer les informations système
-$system_info = wp_debug_toolkit_get_system_info();
+$system_info = wpDebugToolkitGetSystemInfo();
 
 // Récupérer tous les outils via le filtre
 $tools = apply_filters('wp_debug_toolkit_tools', array(

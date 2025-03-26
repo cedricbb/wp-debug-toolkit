@@ -90,7 +90,7 @@ class WPDebugAssets {
      */
     public function enqueueToolCss(string $toolName): string
     {
-        $toolCssPath = WP_DEBUG_TOOLKIT_PLUGIN_URL . 'tools/' . $toolName . '/assets/css/' . $toolName . '.css';
+        $toolCssPath = WP_DEBUG_TOOLKIT_PLUGIN_URL . 'Tools/' . $toolName . '/assets/css/' . $toolName . '.css';
         $toolCssHandle = 'wp-debug-toolkit-' . $toolName;
 
         // Enregistrer et charger le CSS
@@ -111,7 +111,7 @@ class WPDebugAssets {
      */
     public function enqueueToolJs(string $toolName): string
     {
-        $toolJsPath = WP_DEBUG_TOOLKIT_PLUGIN_URL . 'tools/' . $toolName . '/assets/js/' . $toolName . '.js';
+        $toolJsPath = WP_DEBUG_TOOLKIT_PLUGIN_URL . 'Tools/' . $toolName . '/assets/js/' . $toolName . '.js';
         $toolJsHandle = 'wp-debug-toolkit-' . $toolName;
 
         // Enregistrer et charger le JS

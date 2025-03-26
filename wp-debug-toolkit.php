@@ -12,10 +12,10 @@
 
 // Si ce fichier est appelé directement, on sort.
 if (!defined('ABSPATH')) {
-exit;
+    exit;
 }
 
- // Définition des constantes
+// Définition des constantes
 const WP_DEBUG_TOOLKIT_VERSION = '1.0.0';
 define('WP_DEBUG_TOOLKIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_DEBUG_TOOLKIT_PLUGIN_URL', plugin_dir_url(__FILE__));
@@ -30,7 +30,7 @@ class WPDebugToolkit {
 
     public static function get_instance(): ?WPDebugToolkit
     {
-        if (null(self::$instance)) {
+        if (null === self::$instance) {
             self::$instance = new self();
         }
         return self::$instance;
@@ -88,7 +88,7 @@ class WPDebugToolkit {
 
     private function loadTool($toolName): void
     {
-        $tool_file = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'tools/' . $toolName . '/class-' . str_replace('-', '-', $toolName) . '.php';
+        $tool_file = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'Tools/' . $toolName . '/class-' . str_replace('-', '-', $toolName) . '.php';
 
         if (file_exists($tool_file)) {
             require_once $tool_file;
@@ -135,9 +135,9 @@ class WPDebugToolkit {
 }
 
 // Hooks d'activation, de désactivation et de désinstallation
-register_activation_hook(__FILE__, array('WP_Debug_Toolkit', 'activate'));
-register_deactivation_hook(__FILE__, array('WP_Debug_Toolkit', 'deactivate'));
-register_uninstall_hook(__FILE__, array('WP_Debug_Toolkit', 'uninstall'));
+register_activation_hook(__FILE__, array('WPDebugToolkit', 'activate'));
+register_deactivation_hook(__FILE__, array('WPDebugToolkit', 'deactivate'));
+register_uninstall_hook(__FILE__, array('WPDebugToolkit', 'uninstall'));
 
 // Démarre le plugin
 function wp_debug_toolkit(): ?WPDebugToolkit

@@ -103,7 +103,7 @@ class WPDebugAdmin {
         // Si aucun outil n'a affiché de contenu, afficher le template par défaut
         if (!did_action('wp_debug_toolkit_tab_content_' . $currentTab)) {
             // Inclure le template correspondant à l'onglet
-            $templatePath = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/view/' . $currentTab . '.php';
+            $templatePath = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/views/' . $currentTab . '.php';
 
             if (file_exists($templatePath)) {
                 include $templatePath;
