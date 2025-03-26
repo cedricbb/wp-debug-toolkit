@@ -1,0 +1,20 @@
+{
+  "name": "cedricbb/wp-debug-toolkit",
+  "description": "A collection of tools to help debug WordPress and Elementor",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Cedric Billard",
+      "email": "cedric.billard09@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "WPDebugToolkit\\": "src/"
+    }
+  }
+}

@@ -6,12 +6,14 @@
  */
 
 // Si ce fichier est appelé directement, on sort.
+use WPDebugToolkit\Util\SystemInfo;
+
 if (!defined('ABSPATH')) {
     exit;
 }
 
 // Récupérer les informations système
-$system_info = wpDebugToolkitGetSystemInfo();
+$system_info = SystemInfo::getSystemInfo();
 
 // Récupérer tous les outils via le filtre
 $tools = apply_filters('wp_debug_toolkit_tools', array(
