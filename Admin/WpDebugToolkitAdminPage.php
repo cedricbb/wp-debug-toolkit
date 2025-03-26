@@ -74,7 +74,7 @@ class WpDebugToolkitAdminPage {
      */
     protected function getTabIcon(): string
     {
-        return 'dashicons-admin-generic';
+        return 'dashicons-Admin-generic';
     }
 
     /**

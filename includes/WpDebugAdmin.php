@@ -95,15 +95,15 @@ class WPDebugAdmin {
         }
 
         // Inclure le template de l'en-tête
-        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/partials/header.php';
+        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'Admin/partials/header.php';
         // Inclure le template de navigation
-        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/partials/navigation.php';
+        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'Admin/partials/navigation.php';
         // Déclencher une action pour permettre aux outils d'afficher leur contenu
         do_action('wp_debug_toolkit_tab_content', $currentTab);
         // Si aucun outil n'a affiché de contenu, afficher le template par défaut
         if (!did_action('wp_debug_toolkit_tab_content_' . $currentTab)) {
             // Inclure le template correspondant à l'onglet
-            $templatePath = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/views/' . $currentTab . '.php';
+            $templatePath = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'Admin/views/' . $currentTab . '.php';
 
             if (file_exists($templatePath)) {
                 include $templatePath;
@@ -113,7 +113,7 @@ class WPDebugAdmin {
         }
 
         // Inclure le template du pied de page
-        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/partials/footer.php';
+        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'Admin/partials/footer.php';
     }
 
     public function displaySettingsPage(): void

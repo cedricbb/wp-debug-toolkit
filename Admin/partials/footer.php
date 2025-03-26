@@ -12,7 +12,6 @@ if (!defined('ABSPATH')) {
         <div class="wp-debug-toolkit-footer-info">
             <p>
                 <?php echo esc_html__('WP Debug Toolkit', 'wp-debug-toolkit'); ?> &copy; <?php echo date('Y'); ?>
-                <span class="dashicons dashicons-heart"></span>
                 <?php echo sprintf(
                     esc_html__('Fait avec %s pour la communauté WordPress', 'wp-debug-toolkit'),
                     '<span class="dashicons dashicons-heart"></span>'

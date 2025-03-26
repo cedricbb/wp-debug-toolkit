@@ -55,7 +55,7 @@ class WPDebugToolkit {
         require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'includes/WpDebugAssets.php';
 
         // Inclure la classe d'administration
-        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'admin/WpDebugToolkitAdminPage.php';
+        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'Admin/WpDebugToolkitAdminPage.php';
     }
 
     private function setLocale(): void
