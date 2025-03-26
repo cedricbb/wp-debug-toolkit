@@ -121,7 +121,7 @@ $tools = apply_filters('wp_debug_toolkit_tools', array(
                         <p><?php echo esc_html($tool['description']); ?></p>
                     </div>
                     <div class="wp-debug-toolkit-tool-card-footer">
-                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp-debug-toolkit&tab=' . $tool_id)); ?>" class="button">
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp-debug-toolkit&tab=' . $tool_id)); ?>" class="button button-crayola">
                             <?php echo esc_html__('Ouvrir', 'wp-debug-toolkit'); ?>
                         </a>
                     </div>

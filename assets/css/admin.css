@@ -4,8 +4,8 @@
 
 /* Variables */
 :root {
-    --wp-debug-primary: #0073aa;
-    --wp-debug-secondary: #23282d;
+    --wp-debug-primary: #ef476f;
+    --wp-debug-secondary: #26547c;
     --wp-debug-success: #46b450;
     --wp-debug-warning: #ffb900;
     --wp-debug-error: #dc3232;
@@ -19,7 +19,6 @@
 
 /* Structure principale */
 .wp-debug-toolkit-wrapper {
-    margin: 0;
     padding: 0;
 }
 
@@ -66,6 +65,10 @@
     align-items: center;
 }
 
+.wp-debug-toolkit-navigation .nav-tab:first-child {
+    margin-left: 0;
+}
+
 .wp-debug-toolkit-navigation .nav-tab .dashicons {
     margin-right: 5px;
 }
@@ -73,6 +76,13 @@
 .wp-debug-toolkit-navigation .nav-tab-active {
     background-color: #fff;
     border-bottom-color: #fff;
+}
+
+.wp-debug-toolkit-dashboard .wp-debug-toolkit-welcome {
+    border-left: 4px solid var(--wp-debug-primary);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    padding: 1px 12px;
+    background: #fff;
 }
 
 /* Cards */
@@ -177,6 +187,19 @@
     padding: 10px 15px;
     border-top: 1px solid var(--wp-debug-gray);
     text-align: right;
+}
+
+.wp-debug-toolkit-tool-card-footer .button-crayola, .wp-debug-toolkit-tool-card-footer .button-crayola:focus {
+    color: var(--wp-debug-primary);
+    border-color: var(--wp-debug-primary);
+    background: #fff;
+    box-shadow: none;
+}
+
+.wp-debug-toolkit-tool-card-footer .button-crayola:hover {
+    color: #fff;
+    border-color: var(--wp-debug-primary);
+    background: var(--wp-debug-primary);
 }
 
 /* Formulaires */
