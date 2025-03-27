@@ -71,7 +71,7 @@ $system_info = SystemInfo::getSystemInfo();
                         <p><?php echo esc_html($tool['description']); ?></p>
                     </div>
                     <div class="wp-debug-toolkit-tool-card-footer">
-                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp-debug-toolkit&tab=' . $tool_id)); ?>" class="button button-crayola">
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=wp-debug-toolkit-' . $tool_id)); ?>" class="button button-crayola">
                             <?php echo esc_html__('Ouvrir', 'wp-debug-toolkit'); ?>
                         </a>
                     </div>

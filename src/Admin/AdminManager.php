@@ -34,104 +34,52 @@ class AdminManager
         $this->pages['settings'] = new Settings();
         $this->pages['about'] = new About();
 
-        // Initialiser les onglets
-        $this->tabs = [
-            'dashboard' => [
-                'title' => __('Tableau de bord', 'wp-debug-toolkit'),
-                'icon' => 'dashicons-dashboard',
-            ],
-            'settings' => [
-                'title' => __('Paramètres', 'wp-debug-toolkit'),
-                'icon' => 'dashicons-admin-settings',
-            ],
-            'about' => [
-                'title' => __('À propos', 'wp-debug-toolkit'),
-                'icon' => 'dashicons-info',
-            ]
-        ];
-
-        // Permettre l'ajout d'onglets supplémentaires
-        $this->tabs = apply_filters('wp_debug_toolkit_tabs', $this->tabs);
+        // Permettre l'ajout de pages supplémentaires via un filtre
+        $this->pages = apply_filters('wp_debug_toolkit_pages', $this->pages);
     }
 
     public function addAdminMenu(): void
     {
+        // Ajouter le menu principal
         add_menu_page(
             __('WP Debug Toolkit', 'wp-debug-toolkit'),
             __('Debug Toolkit', 'wp-debug-toolkit'),
             'manage_options',
             'wp-debug-toolkit',
-            [$this, 'displayAdminPage'],
+            [$this->pages['dashboard'], 'render'],
             'dashicons-admin-tools',
             100
         );
 
-        // Ajouter un sous-menu pour chaque outil
-        foreach ($this->tabs as $tab_id => $tab) {
+        // Ajouter un sous-menu pour le tableau de bord (même que le menu principal)
+        add_submenu_page(
+            'wp-debug-toolkit',
+            __('Tableau de bord', 'wp-debug-toolkit'),
+            __('Tableau de bord', 'wp-debug-toolkit'),
+            'manage_options',
+            'wp-debug-toolkit',
+            [$this->pages['dashboard'], 'render']
+        );
+
+        // Ajouter un sous-menu pour chaque page
+        foreach ($this->pages as $page_id => $page) {
+            // Sauter le tableau de bord car nous l'avons déjà ajouté
+            if ($page_id === 'dashboard') {
+                continue;
+            }
+
             add_submenu_page(
                 'wp-debug-toolkit',
-                $tab['title'],
-                $tab['title'],
+                $page->getTitle(),
+                $page->getTitle(),
                 'manage_options',
-                'wp-debug-toolkit-' . $tab_id,
-                [$this, 'displayToolPage']
+                'wp-debug-toolkit-' . $page_id,
+                [$page, 'render']
             );
         }
-    }
 
-    public function displayAdminPage(): void
-    {
-        // Déterminer l'onglet actif
-        $currentTab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'dashboard';
-
-        // Vérifier si l'onglet existe
-        if (!isset($this->tabs[$currentTab])) {
-            $currentTab = 'dashboard';
-        }
-
-        // Afficher l'en-tête
-        $this->renderHeader();
-
-        // Afficher la navigation
-        $this->renderNavigation($currentTab);
-
-        // Afficher le contenu de l'onglet
-        if (isset($this->pages[$currentTab])) {
-            $this->pages[$currentTab]->render();
-        } else {
-            // Si ce n'est pas une page, c'est probablement un outil
-            do_action('wp_debug_toolkit_tab_content', $currentTab);
-        }
-
-        // Afficher le pied de page
-        $this->renderFooter();
-    }
-
-    public function displayToolPage(): void
-    {
-        // Obtenir l'ID de l'outil à partir de la apge actuelle
-        $page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
-        $toolID = str_replace('wp-debug-toolkit-', '', $page);
-
-        // Rediriger vers l'onglet correspondant
-        wp_redirect(admin_url('admin.php?page=wp-debug-toolkit&tab=' . $toolID));
-        exit;
-    }
-
-    private function renderHeader(): void
-    {
-        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Admin/View/header.php';
-    }
-
-    private function renderNavigation(string $currentTab): void
-    {
-        $tabs = $this->tabs;
-        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Admin/View/navigation.php';
-    }
-
-    private function renderFooter(): void
-    {
-        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Admin/View/footer.php';
+        // Ajouter les sous-menus pour les outils (à travers un hook pour permettre aux outils de s'enregistrer)
+        do_action('wp_debug_toolkit_register_tool_pages', 'wp-debug-toolkit');
     }
 
     public function addPage(string $id, $pageInstance): void
@@ -142,15 +90,5 @@ class AdminManager
     public function getPages(): array
     {
         return $this->pages;
-    }
-
-    public function getTabs(): array
-    {
-        return $this->tabs;
-    }
-
-    public function addTab(string $id, array $tabData): void
-    {
-        $this->tabs[$id] = $tabData;
     }
 }

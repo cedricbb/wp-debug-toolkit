@@ -12,6 +12,9 @@ class Dashboard extends AbstractPage
 
     public function render(): void
     {
+        // Afficher l'en-tête
+        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Admin/View/header.php';
+
         // Récupérer les informations système
         $systemInfo = SystemInfo::getSystemInfo();
 
@@ -69,5 +72,8 @@ class Dashboard extends AbstractPage
 
         // Inclure la vue du tableau de bord
         require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Admin/View/dashboard.php';
+
+        // Afficher le pied de page
+        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Admin/View/footer.php';
     }
 }

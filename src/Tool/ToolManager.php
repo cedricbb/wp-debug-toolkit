@@ -19,8 +19,7 @@ class ToolManager
         $this->loadActiveTools();
 
         // Enregistrer le hook pour les onglets et le contenu des onglets
-        add_filter('wp_debug_toolkit_tabs', [$this, 'registerToolTabs']);
-        add_action('wp_debug_toolkit_tab_content', [$this, 'renderToolContent']);
+        add_action('wp_debug_toolkit_register_tool_pages', [$this, 'registerToolPages']);
     }
 
     private function loadToolSettings(): void
@@ -83,25 +82,39 @@ class ToolManager
         return str_replace(' ', '', ucwords(str_replace('-', ' ', $toolId)));
     }
 
-    public function registerToolTabs(array $tabs): array
+    public function registerToolPages(string $parentSlug): void
     {
         // Ajouter un onglet pour chaque outil actif
         foreach ($this->tools as $toolId => $tool) {
-            $tabs[$toolId] = [
-                'title' => $tool->getTitle(),
-                'icon' => $tool->getIcon()
-            ];
+            add_submenu_page(
+                $parentSlug,
+                $tool->getTitle(),
+                $tool->getTitle(),
+                'manage_options',
+                'wp-debug-toolkit-' . $toolId,
+                [$this, 'renderToolPage']
+            );
         }
-
-        return $tabs;
     }
 
-    public function renderToolContent(string $currentTab): void
+    public function renderToolPage(): void
     {
-        // Vérifier si l'onglet correspond à un outil
-        if (isset($this->tools[$currentTab])) {
+        // Obtenir l'ID de l'outil à partir de la page actuelle
+        $page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+        $toolId = str_replace('wp-debug-toolkit-', '', $page);
+        // Vérifier si l'outil existe
+        if (isset($this->tools[$toolId])) {
+            echo '<div class="wrap">';
+            echo '<h1>' . esc_html($this->tools[$toolId]->getTitle()) . '</h1>';
+
             // Afficher le contenu de l'outil
-            $this->tools[$currentTab]->renderContent();
+            $this->tools[$toolId]->renderContent();
+
+            echo '</div>';
+        } else {
+            echo '<div class="notice notice-error"><p>';
+            echo __('Outil introuvable.', 'wp-debug-toolkit');
+            echo '</p></div>';
         }
     }
 
