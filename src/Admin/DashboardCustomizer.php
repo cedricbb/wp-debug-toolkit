@@ -6,7 +6,7 @@ namespace WPDebugToolkit\Admin;
  * Classe pour gérer la personnalisation du tableau de bord
  */
 
-final class DashboardCustomizer
+class DashboardCustomizer
 {
     public function init(): void
     {
@@ -62,9 +62,13 @@ final class DashboardCustomizer
         ]);
     }
 
-    public function addToolCardAttributes($tool): void
+    public function addToolCardAttributes($toolId): void
     {
-        echo ' data-tool-id="' . esc_attr($tool['id']) . '"';
+        if (is_array($toolId)) {
+            $toolId = $toolId[0] ?? '';
+        }
+
+        echo ' data-tool-id="' . esc_attr($toolId) . '"';
     }
 
     public function filterDashboardTools(array $tools): array
