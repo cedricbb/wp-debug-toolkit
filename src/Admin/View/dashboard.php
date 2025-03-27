@@ -59,10 +59,14 @@ $system_info = SystemInfo::getSystemInfo();
     </div>
 
     <div class="wp-debug-toolkit-tools-grid">
-        <h3><?php echo esc_html__('Outils disponibles', 'wp-debug-toolkit'); ?></h3>
+        <h3>
+            <?php echo esc_html__('Outils disponibles', 'wp-debug-toolkit'); ?>
+            <span class="description">
+                <?php echo esc_html__('Glissez/Déposer pour réorganiser les outils', 'wp-debug-toolkit'); ?>
+        </h3>
         <div class="wp-debug-toolkit-tools-list">
             <?php foreach ($tools as $tool_id => $tool) : ?>
-                <div class="wp-debug-toolkit-tool-card">
+                <div class="wp-debug-toolkit-tool-card" <?php do_action('wp_debug_toolkit_tool_card_attributes', $tool_id); ?>>
                     <div class="wp-debug-toolkit-tool-card-header">
                         <span class="dashicons <?php echo esc_attr($tool['icon']); ?>"></span>
                         <h4><?php echo esc_html($tool['title']); ?></h4>
@@ -78,5 +82,9 @@ $system_info = SystemInfo::getSystemInfo();
                 </div>
             <?php endforeach; ?>
         </div>
+    </div>
+
+    <div class="wp-debug-toolkit-save-notification" style="display: none;">
+        <?php echo esc_html__('Les modifications ont été enregistrées.', 'wp-debug-toolkit'); ?>
     </div>
 </div>

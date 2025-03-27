@@ -15,7 +15,6 @@ use WPDebugToolkit\Admin\Page\About;
  */
 class AdminManager
 {
-    private array $tabs = [];
     private array $pages = [];
 
     public function init(): void
