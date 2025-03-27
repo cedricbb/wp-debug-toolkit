@@ -61,8 +61,9 @@ $system_info = SystemInfo::getSystemInfo();
     <div class="wp-debug-toolkit-tools-grid">
         <h3>
             <?php echo esc_html__('Outils disponibles', 'wp-debug-toolkit'); ?>
-            <span class="description">
+            <p class="description">
                 <?php echo esc_html__('Glissez/Déposer pour réorganiser les outils', 'wp-debug-toolkit'); ?>
+            </p>
         </h3>
         <div class="wp-debug-toolkit-tools-list">
             <?php foreach ($tools as $tool_id => $tool) : ?>

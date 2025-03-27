@@ -42,7 +42,7 @@
 }
 
 .wp-debug-toolkit-tool-card-header .dashicons {
-    color: #72777c;
+    color: var(--wp-debug-primary);
 }
 
 /* Corps de carte */
@@ -78,9 +78,6 @@
     width: 36px;
     height: 36px;
     transition: color 0.2s ease;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .wp-debug-toolkit-tool-toggle:hover {
