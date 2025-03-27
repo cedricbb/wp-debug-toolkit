@@ -14,58 +14,6 @@ if (!defined('ABSPATH')) {
 
 // Récupérer les informations système
 $system_info = SystemInfo::getSystemInfo();
-
-// Récupérer tous les outils via le filtre
-$tools = apply_filters('wp_debug_toolkit_tools', array(
-    'elementor-block-analyzer' => array(
-        'title' => __('Analyseur de blocs Elementor', 'wp-debug-toolkit'),
-        'description' => __('Analyse l\'utilisation des widgets Elementor sur le site', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-welcome-widgets-menus',
-        'active' => true
-    ),
-    'elementor-form-analyzer' => array(
-        'title' => __('Analyseur de formulaires Elementor', 'wp-debug-toolkit'),
-        'description' => __('Analyse la configuration des formulaires Elementor', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-forms',
-        'active' => true
-    ),
-    'api-monitor' => array(
-        'title' => __('Moniteur d\'API', 'wp-debug-toolkit'),
-        'description' => __('Surveille les appels API REST entrants et sortants', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-rest-api',
-        'active' => true
-    ),
-    'media-cleaner' => array(
-        'title' => __('Nettoyeur de médias', 'wp-debug-toolkit'),
-        'description' => __('Identifie et nettoie les médias inutilisés', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-images-alt2',
-        'active' => true
-    ),
-    'hook-inspector' => array(
-        'title' => __('Inspecteur de hooks', 'wp-debug-toolkit'),
-        'description' => __('Visualise les actions et filtres WordPress', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-admin-links',
-        'active' => true
-    ),
-    'query-profiler' => array(
-        'title' => __('Profileur de requêtes SQL', 'wp-debug-toolkit'),
-        'description' => __('Analyse les performances des requêtes SQL', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-database',
-        'active' => true
-    ),
-    'cache-inspector' => array(
-        'title' => __('Inspecteur de cache', 'wp-debug-toolkit'),
-        'description' => __('Examine les objets en cache', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-performance',
-        'active' => true
-    ),
-    'cron-monitor' => array(
-        'title' => __('Moniteur de cron', 'wp-debug-toolkit'),
-        'description' => __('Surveille les tâches planifiées WordPress', 'wp-debug-toolkit'),
-        'icon' => 'dashicons-clock',
-        'active' => true
-    )
-));
 ?>
 
 <div class="wp-debug-toolkit-dashboard">
