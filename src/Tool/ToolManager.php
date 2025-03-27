@@ -91,7 +91,7 @@ class ToolManager
                 $tool->getTitle(),
                 $tool->getTitle(),
                 'manage_options',
-                $parentSlug . '-' . $toolId,
+                'wp-debug-toolkit-' . $toolId,
                 [$this, 'renderToolPage']
             );
         }
@@ -100,9 +100,8 @@ class ToolManager
     public function renderToolPage(): void
     {
         // Obtenir l'ID de l'outil à partir de la page actuelle
-        $screen = get_current_screen();
         $page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
-        $toolId = str_replace('wp-debug-toolkit-tool-', '', $page);
+        $toolId = str_replace('wp-debug-toolkit-', '', $page);
         // Vérifier si l'outil existe
         if (isset($this->tools[$toolId])) {
             echo '<div class="wrap">';
