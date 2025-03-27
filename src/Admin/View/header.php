@@ -8,8 +8,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Déterminer l'onglet actif
-$currentTab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'dashboard';
 ?>
 <div class="wrap wp-debug-toolkit-wrapper">
     <div class="wp-debug-toolkit-header">
