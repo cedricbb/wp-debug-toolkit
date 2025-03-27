@@ -96,10 +96,11 @@ class AdminManager
         $this->renderNavigation($currentTab);
 
         // Afficher le contenu de l'onglet
-        if (isset($this->tabs[$currentTab])) {
+        if (isset($this->pages[$currentTab])) {
             $this->pages[$currentTab]->render();
         } else {
-            do_action('wp_debug_toolkit_tab_content_', $currentTab);
+            // Si ce n'est pas une page, c'est probablement un outil
+            do_action('wp_debug_toolkit_tab_content', $currentTab);
         }
 
         // Afficher le pied de page

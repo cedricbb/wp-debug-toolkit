@@ -1,6 +1,6 @@
 <?php
 
-namespace WPDebugToolkit\Tools\ElementorBlockAnalyzer;
+namespace WPDebugToolkit\Tool\ElementorBlockAnalyzer;
 
 use WPDebugToolkit\Tool\AbstractTool;
 use WPDebugToolkit\Util\ElementorHelper;
@@ -46,7 +46,15 @@ class ElementorBlockAnalyzer extends AbstractTool
         }
 
         // Inclure la vue de l'outil
-        require_once WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Tool/ElementorBlockAnalyzer/View/content.php';
+        $viewPath = WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Tool/ElementorBlockAnalyzer/View/content.php';
+
+        if (file_exists($viewPath)) {
+            include $viewPath;
+        } else {
+            echo '<div class="notice notice-error"><p>';
+            echo __('Impossible de charger la vue de l\'outil. Fichier non trouvé : ', 'wp-debug-toolkit') . $viewPath;
+            echo '</p></div>';
+        }
     }
 
     public function analyzeElementorBlock(): void

@@ -4,6 +4,7 @@ namespace WPDebugToolkit\Tool;
 
 use WPDebugToolkit\Core\Plugin;
 use WPDebugToolkit\Tool\ToolInterface;
+
 class ToolManager
 {
     private array $tools = [];
@@ -58,7 +59,7 @@ class ToolManager
     {
         // Convertir l'ID de l'outil en nom de classe
         $className = $this->getToolClassName($toolId);
-        $fullClassName = 'WPDebugToolkit\\Tools\\' . $className . '\\' . $className;
+        $fullClassName = 'WPDebugToolkit\\Tool\\' . $className . '\\' . $className;
 
         // Vérifier si la classe existe
         if (class_exists($fullClassName)) {
