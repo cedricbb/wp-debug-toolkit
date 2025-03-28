@@ -10,7 +10,6 @@ use WPDebugToolkit\Admin\DashboardCustomizer;
 class Plugin
 {
     private static ?Plugin $instance = null;
-    private AssetsManager $assetsManager;
     private AdminManager $adminManager;
     private ToolManager $toolManager;
     private $dashboardCustomizer;
@@ -18,7 +17,6 @@ class Plugin
     private function __construct()
     {
         // Initialisation des gestionnaires
-        $this->assetsManager = new AssetsManager();
         $this->adminManager = new AdminManager();
         $this->toolManager = new ToolManager();
         $this->dashboardCustomizer = new DashboardCustomizer();
@@ -30,7 +28,6 @@ class Plugin
         add_action('plugins_loaded', [$this, 'loadTextDomain']);
         $this->toolManager->init();
         $this->adminManager->init();
-        $this->assetsManager->init();
         $this->dashboardCustomizer->init();
         // Ajouter le lien Paramètres dans la liste des plugins
         add_filter('plugin_action_links_' . WP_DEBUG_TOOLKIT_PLUGIN_BASENAME, [$this, 'addSettingsLink']);
@@ -97,11 +94,6 @@ class Plugin
             // Créer un fichier index.html pour sécurité supplémentaire
             @file_put_contents($logsDir . '/index.php', '<?php // Silence is golden.');
         }
-    }
-
-    public function getAssetsManager(): AssetsManager
-    {
-        return $this->assetsManager;
     }
 
     public function getAdminManager(): AdminManager

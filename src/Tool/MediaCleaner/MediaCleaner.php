@@ -24,7 +24,7 @@ class MediaCleaner extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'Media Cleaner';
+        return 'Nettoyeur de médias';
     }
 
     protected function getDefaultDescription(): string

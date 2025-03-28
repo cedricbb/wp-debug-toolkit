@@ -28,7 +28,7 @@ class ElementorFormAnalyzer extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'Elementor Form Analyzer';
+        return 'Analyseur de formulaire Elementor';
     }
 
     protected function getDefaultDescription(): string

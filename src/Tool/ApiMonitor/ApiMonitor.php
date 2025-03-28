@@ -28,7 +28,7 @@ class ApiMonitor extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'API Monitor';
+        return 'Moniteur d\'API';
     }
 
     protected function getDefaultDescription(): string

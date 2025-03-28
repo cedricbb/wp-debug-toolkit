@@ -27,7 +27,7 @@ class CronMonitor extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'Cron Monitor';
+        return 'Moniteur de Cron';
     }
 
     protected function getDefaultDescription(): string
