@@ -3,7 +3,7 @@
  * Plugin Name: WP Debug Toolkit
  * Plugin URI: https://github.com/cedricbb/wp-debug-toolkit
  * Description: A collection of tools to help debug WordPress and Elementor.
- * Version: 1.0.0
+ * Version: 1.5.0
  * Author: Cedric Billard
  * Author URI: https://github.com/cedricbb
  * Text Domain: wp-debug-toolkit
