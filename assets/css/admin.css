@@ -1,11 +1,7 @@
-/**
- * Styles d'administration pour WP Debug Toolkit
- */
-
 /* Variables */
 :root {
     --wp-debug-primary: #ef476f;
-    --wp-debug-secondary: #26547c;
+    --wp-debug-secondary: #C2095A;
     --wp-debug-success: #46b450;
     --wp-debug-warning: #ffb900;
     --wp-debug-error: #dc3232;
@@ -17,7 +13,9 @@
     --wp-debug-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
-/* Structure principale */
+/*--------------------------------------------------------------
+# Structure principale
+--------------------------------------------------------------*/
 .wp-debug-toolkit-wrapper {
     padding: 0;
 }
@@ -55,59 +53,11 @@
     border-radius: var(--wp-debug-border-radius);
 }
 
-/* Navigation */
-.wp-debug-toolkit-navigation {
-    margin-bottom: 20px;
-}
-
-.wp-debug-toolkit-navigation .nav-tab {
-    display: flex;
-    align-items: center;
-}
-
-.wp-debug-toolkit-navigation .nav-tab:first-child {
-    margin-left: 0;
-}
-
-.wp-debug-toolkit-navigation .nav-tab .dashicons {
-    margin-right: 5px;
-}
-
-.wp-debug-toolkit-navigation .nav-tab-active {
-    background-color: #fff;
-    border-bottom-color: #fff;
-}
-
 .wp-debug-toolkit-dashboard .wp-debug-toolkit-welcome {
     border-left: 4px solid var(--wp-debug-primary);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
     padding: 1px 12px;
     background: #fff;
-}
-
-/* Cards */
-.wp-debug-toolkit-card {
-    background-color: #fff;
-    border-radius: var(--wp-debug-border-radius);
-    box-shadow: var(--wp-debug-box-shadow);
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-.wp-debug-toolkit-card-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid var(--wp-debug-gray);
-    background-color: var(--wp-debug-light-gray);
-}
-
-.wp-debug-toolkit-card-header h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.wp-debug-toolkit-card-body {
-    padding: 20px;
 }
 
 /* Informations système */
@@ -134,8 +84,10 @@
     background-color: var(--wp-debug-light-gray);
     border-radius: var(--wp-debug-border-radius);
 }
-
-/* Grille d'outils */
+/*--------------------------------------------------------------
+# Grille d'outils et cartes
+--------------------------------------------------------------*/
+/* Container et grille d'outils */
 .wp-debug-toolkit-tools-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -143,25 +95,38 @@
     margin-top: 15px;
 }
 
+/* Carte d'outil */
 .wp-debug-toolkit-tool-card {
-    background-color: #fff;
-    border-radius: var(--wp-debug-border-radius);
-    box-shadow: var(--wp-debug-box-shadow);
+    background: #fff;
     border: 1px solid var(--wp-debug-gray);
-    transition: all 0.2s ease;
+    box-shadow: var(--wp-debug-box-shadow);
+    margin-bottom: 0;
+    position: relative;
+    transition: box-shadow 0.2s ease;
+    border-radius: var(--wp-debug-border-radius);
+    overflow: hidden;
 }
 
 .wp-debug-toolkit-tool-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* En-tête de carte */
 .wp-debug-toolkit-tool-card-header {
+    cursor: move;
+    border-bottom: 1px solid var(--wp-debug-gray);
     display: flex;
     align-items: center;
     padding: 15px;
-    border-bottom: 1px solid var(--wp-debug-gray);
-    background-color: var(--wp-debug-light-gray);
+    background: var(--wp-debug-light-gray);
+    position: relative;
+}
+
+.wp-debug-toolkit-tool-card-header h4 {
+    margin: 0 0 0 8px;
+    flex-grow: 1;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .wp-debug-toolkit-tool-card-header .dashicons {
@@ -172,24 +137,23 @@
     height: 20px;
 }
 
-.wp-debug-toolkit-tool-card-header h4 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 500;
-}
-
+/* Corps de carte */
 .wp-debug-toolkit-tool-card-body {
-    padding: 15px;
+    padding: 20px;
     min-height: 60px;
 }
 
+/* Pied de carte */
 .wp-debug-toolkit-tool-card-footer {
-    padding: 10px 15px;
     border-top: 1px solid var(--wp-debug-gray);
-    text-align: right;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: flex-end;
+    background: var(--wp-debug-light-gray);
 }
 
-.wp-debug-toolkit-tool-card-footer .button-crayola, .wp-debug-toolkit-tool-card-footer .button-crayola:focus {
+.wp-debug-toolkit-tool-card-footer .button-crayola,
+.wp-debug-toolkit-tool-card-footer .button-crayola:focus {
     color: var(--wp-debug-primary);
     border-color: var(--wp-debug-primary);
     background: #fff;
@@ -201,95 +165,126 @@
     border-color: var(--wp-debug-primary);
     background: var(--wp-debug-primary);
 }
-
-/* Formulaires */
-.wp-debug-toolkit-form {
-    max-width: 800px;
-}
-
-.wp-debug-toolkit-form-row {
-    margin-bottom: 15px;
-}
-
-.wp-debug-toolkit-form-row label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-
-.wp-debug-toolkit-form-row input[type="text"],
-.wp-debug-toolkit-form-row input[type="number"],
-.wp-debug-toolkit-form-row select,
-.wp-debug-toolkit-form-row textarea {
-    width: 100%;
-    max-width: 400px;
-}
-
-.wp-debug-toolkit-form-actions {
-    margin-top: 20px;
-}
-
-/* Tableaux */
-.wp-debug-toolkit-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.wp-debug-toolkit-table th,
-.wp-debug-toolkit-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid var(--wp-debug-gray);
-}
-
-.wp-debug-toolkit-table th {
-    background-color: var(--wp-debug-light-gray);
-    font-weight: 600;
-}
-
-.wp-debug-toolkit-table tr:hover {
-    background-color: rgba(0, 115, 170, 0.05);
-}
-
-/* Barre de progression */
-.wp-debug-toolkit-progress {
-    margin: 15px 0;
-}
-
-.wp-debug-toolkit-progress progress {
-    width: 100%;
-    height: 20px;
+/*--------------------------------------------------------------
+# Personnalisation (glisser-déposer, options d'écran)
+--------------------------------------------------------------*/
+/* Placeholder pour le sortable */
+.wp-debug-toolkit-tool-card-placeholder {
+    border: 1px dashed var(--wp-debug-primary);
+    background: rgba(239, 71, 111, 0.05);
+    height: 150px;
+    margin-bottom: 20px;
     border-radius: var(--wp-debug-border-radius);
 }
 
-.wp-debug-toolkit-progress-status {
-    margin-top: 5px;
-    font-size: 12px;
-    color: var(--wp-debug-dark-gray);
+/* Bouton de toggle pour montrer/cacher les outils */
+.wp-debug-toolkit-tool-toggle {
+    background: none;
+    border: none;
+    color: var(--wp-debug-primary);
+    cursor: pointer;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    transition: color 0.2s ease;
 }
 
-/* Pied de page */
-.wp-debug-toolkit-footer {
-    margin-top: 30px;
-    padding: 15px 0;
-    border-top: 1px solid var(--wp-debug-gray);
-    text-align: center;
-    color: var(--wp-debug-dark-gray);
-    font-size: 12px;
+.wp-debug-toolkit-tool-toggle:hover {
+    color: var(--wp-debug-primary);
 }
 
-.wp-debug-toolkit-footer .dashicons {
-    color: #dc3232;
-    vertical-align: middle;
+.wp-debug-toolkit-tool-toggle:focus {
+    box-shadow: none;
+    outline: none;
 }
 
-/* Adaptations responsives */
+/* Outil caché */
+.wp-debug-toolkit-tool-hidden .wp-debug-toolkit-tool-card-body,
+.wp-debug-toolkit-tool-hidden .wp-debug-toolkit-tool-card-footer {
+    display: none;
+}
+
+.wp-debug-toolkit-tool-hidden {
+    opacity: 0.75;
+}
+
+/* Options d'écran personnalisées */
+#wp-debug-toolkit-available-tools {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    margin: 10px 0 15px;
+}
+
+#wp-debug-toolkit-available-tools label {
+    display: block;
+    padding: 8px;
+    border-radius: var(--wp-debug-border-radius);
+    transition: background-color 0.2s ease;
+}
+
+#wp-debug-toolkit-available-tools label:hover {
+    background-color: var(--wp-debug-light-gray);
+}
+
+/* Mode de chargement pendant les actions AJAX */
+.wp-debug-toolkit-loading {
+    position: relative;
+}
+
+.wp-debug-toolkit-loading:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.7) url(../images/spinner.gif) no-repeat center;
+    z-index: 999;
+}
+
+/* Notification de sauvegarde */
+.wp-debug-toolkit-save-notification {
+    position: fixed;
+    top: 32px;
+    right: 20px;
+    background: var(--wp-debug-primary);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: var(--wp-debug-border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    transform: translateY(-100px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.wp-debug-toolkit-save-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Styles pour les options d'écran de WordPress */
+#screen-meta #wp-debug-toolkit-save-screen-options {
+    background-color: var(--wp-debug-primary);
+    border-color: var(--wp-debug-primary);
+    color: white;
+}
+
+#screen-meta #wp-debug-toolkit-save-screen-options:hover {
+    background-color: var(--wp-debug-secondary);
+    border-color: var(--wp-debug-secondary);
+}
+
+/*--------------------------------------------------------------
+# Responsive
+--------------------------------------------------------------*/
 @media screen and (max-width: 782px) {
-    .wp-debug-toolkit-system-info-grid {
+    .wp-debug-toolkit-tools-list {
         grid-template-columns: 1fr;
     }
 
-    .wp-debug-toolkit-tools-list {
+    #wp-debug-toolkit-available-tools {
         grid-template-columns: 1fr;
     }
 
@@ -298,7 +293,7 @@
         align-items: flex-start;
     }
 
-    .wp-debug-toolkit-version {
-        margin-top: 10px;
+    .wp-debug-toolkit-header h1 {
+        margin-bottom: 10px;
     }
 }

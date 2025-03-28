@@ -6,20 +6,17 @@ namespace WPDebugToolkit\Core;
 
 use WPDebugToolkit\Admin\AdminManager;
 use WPDebugToolkit\Tool\ToolManager;
-use WPDebugToolkit\Admin\DashboardCustomizer;
 class Plugin
 {
     private static ?Plugin $instance = null;
     private AdminManager $adminManager;
     private ToolManager $toolManager;
-    private $dashboardCustomizer;
 
     private function __construct()
     {
         // Initialisation des gestionnaires
         $this->adminManager = new AdminManager();
         $this->toolManager = new ToolManager();
-        $this->dashboardCustomizer = new DashboardCustomizer();
     }
 
     public function init(): void
@@ -28,7 +25,6 @@ class Plugin
         add_action('plugins_loaded', [$this, 'loadTextDomain']);
         $this->toolManager->init();
         $this->adminManager->init();
-        $this->dashboardCustomizer->init();
         // Ajouter le lien Paramètres dans la liste des plugins
         add_filter('plugin_action_links_' . WP_DEBUG_TOOLKIT_PLUGIN_BASENAME, [$this, 'addSettingsLink']);
     }
@@ -104,11 +100,6 @@ class Plugin
     public function getToolManager(): ToolManager
     {
         return $this->toolManager;
-    }
-
-    public function getDashboardCustomizer(): DashboardCustomizer
-    {
-        return $this->dashboardCustomizer;
     }
 
     public static function get_instance(): Plugin
