@@ -5,33 +5,30 @@ declare(strict_types=1);
 namespace WPDebugToolkit\Core;
 
 use WPDebugToolkit\Admin\AdminManager;
-use WPDebugToolkit\Core\AssetsManager;
 use WPDebugToolkit\Tool\ToolManager;
+use WPDebugToolkit\Admin\DashboardCustomizer;
 class Plugin
 {
     private static ?Plugin $instance = null;
-    private AssetsManager $assetsManager;
     private AdminManager $adminManager;
     private ToolManager $toolManager;
+    private $dashboardCustomizer;
 
     private function __construct()
     {
         // Initialisation des gestionnaires
-        $this->assetsManager = new AssetsManager();
         $this->adminManager = new AdminManager();
         $this->toolManager = new ToolManager();
+        $this->dashboardCustomizer = new DashboardCustomizer();
     }
 
     public function init(): void
     {
         // Charger les traductions
         add_action('plugins_loaded', [$this, 'loadTextDomain']);
-        // D'abord ToolManager pour qu'il enregistre ses filtres
         $this->toolManager->init();
-        // Puis AdminManager qui utilisera ces filtres
         $this->adminManager->init();
-        // Puis AssetsManager
-        $this->assetsManager->init();
+        $this->dashboardCustomizer->init();
         // Ajouter le lien Paramètres dans la liste des plugins
         add_filter('plugin_action_links_' . WP_DEBUG_TOOLKIT_PLUGIN_BASENAME, [$this, 'addSettingsLink']);
     }
@@ -99,11 +96,6 @@ class Plugin
         }
     }
 
-    public function getAssetsManager(): AssetsManager
-    {
-        return $this->assetsManager;
-    }
-
     public function getAdminManager(): AdminManager
     {
         return $this->adminManager;
@@ -112,6 +104,11 @@ class Plugin
     public function getToolManager(): ToolManager
     {
         return $this->toolManager;
+    }
+
+    public function getDashboardCustomizer(): DashboardCustomizer
+    {
+        return $this->dashboardCustomizer;
     }
 
     public static function get_instance(): Plugin

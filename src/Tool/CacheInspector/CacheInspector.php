@@ -27,7 +27,7 @@ class CacheInspector extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'Cache Inspector';
+        return 'Inspecteur de cache';
     }
 
     protected function getDefaultDescription(): string

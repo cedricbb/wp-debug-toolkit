@@ -24,7 +24,7 @@ class QueryProfiler extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'Query Profiler';
+        return 'Profileur de requêtes SQL';
     }
 
     protected function getDefaultDescription(): string

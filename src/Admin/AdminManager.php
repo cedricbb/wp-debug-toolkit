@@ -15,7 +15,6 @@ use WPDebugToolkit\Admin\Page\About;
  */
 class AdminManager
 {
-    private array $tabs = [];
     private array $pages = [];
 
     public function init(): void
@@ -25,6 +24,7 @@ class AdminManager
 
         // Ajouter les hooks d'administration
         add_action('admin_menu', [$this, 'addAdminMenu']);
+        add_action('admin_enqueue_scripts', [$this, 'registerAdminAssets']);
     }
 
     private function initDefaultPages(): void
@@ -80,6 +80,40 @@ class AdminManager
 
         // Ajouter les sous-menus pour les outils (à travers un hook pour permettre aux outils de s'enregistrer)
         do_action('wp_debug_toolkit_register_tool_pages', 'wp-debug-toolkit');
+    }
+
+    public function registerAdminAssets(string $hook): void
+    {
+        if (str_contains($hook, 'wp-debug-toolkit') || $hook === 'toplevel_page_wp-debug-toolkit') {
+            // Enregistrer et charger le CSS principal
+            wp_enqueue_style(
+                'wp-debug-toolkit-admin-css',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/css/admin.css',
+                [],
+                WP_DEBUG_TOOLKIT_VERSION . '-' . time()
+            );
+
+            // Enregistrer et charger le JS principal
+            wp_enqueue_script(
+                'wp-debug-toolkit-admin-js',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/admin.js',
+                [],
+                WP_DEBUG_TOOLKIT_VERSION,
+                true
+            );
+
+            // Localiser le script avec des données
+            wp_localize_script(
+                'wp-debug-toolkit-admin',
+                'wpDebugToolkit',
+                [
+                    'ajaxUrl' => admin_url('admin-ajax.php'),
+                    'nonce' => wp_create_nonce('wp-debug-toolkit-nonce'),
+                    'loading' => __('Chargement...', 'wp-debug-toolkit'),
+                    'error' => __('Une erreur s\'est produite. Veuillez réessayer.', 'wp-debug-toolkit')
+                ]
+            );
+        }
     }
 
     public function addPage(string $id, $pageInstance): void

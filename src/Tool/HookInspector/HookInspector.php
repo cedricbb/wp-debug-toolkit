@@ -28,7 +28,7 @@ class HookInspector extends AbstractTool
     protected function getDefaultTitle(): string
     {
         // TODO: Implement getDefaultTitle() method.
-        return 'Hook Inspector';
+        return 'Inspecteur de Hooks';
     }
 
     protected function getDefaultDescription(): string
