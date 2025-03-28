@@ -12,7 +12,6 @@
         init: function() {
             this.initSortable();
             this.initMetaboxToggles();
-            this.initScreenOptions();
             this.bindEvents();
         },
 
@@ -59,92 +58,9 @@
         },
 
         /**
-         * Initialise les options d'écran pour activer/désactiver les outils
-         */
-        initScreenOptions: function() {
-            // Ajouter un bouton pour les options d'écran s'il n'existe pas déjà
-            if ($('#screen-options-link-wrap').length === 0) {
-                $('body').append(
-                    '<div id="screen-options-link-wrap" class="hide-if-no-js screen-meta-toggle">' +
-                    '<button type="button" id="show-settings-link" class="button show-settings" aria-controls="screen-options-wrap" aria-expanded="false">' +
-                    wp_debug_toolkit_customizer.screen_options_text +
-                    '</button>' +
-                    '</div>'
-                );
-
-                // Créer le conteneur pour les options d'écran
-                $('body').append(
-                    '<div id="screen-options-wrap" class="hidden" tabindex="-1" aria-label="' + wp_debug_toolkit_customizer.screen_options_text + '">' +
-                    '<form id="adv-settings" method="post">' +
-                    '<fieldset class="metabox-prefs">' +
-                    '<legend>' + wp_debug_toolkit_customizer.available_tools_text + '</legend>' +
-                    '<div id="wp-debug-toolkit-available-tools"></div>' +
-                    '</fieldset>' +
-                    '<button type="button" class="button button-primary" id="wp-debug-toolkit-save-screen-options">' +
-                    wp_debug_toolkit_customizer.apply_text +
-                    '</button>' +
-                    '</form>' +
-                    '</div>'
-                );
-
-                // Charger la liste des outils disponibles
-                this.loadAvailableTools();
-            }
-        },
-
-        /**
-         * Charge la liste des outils disponibles via AJAX
-         */
-        loadAvailableTools: function() {
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'wp_debug_toolkit_get_available_tools',
-                    nonce: wp_debug_toolkit_customizer.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        WPDebugToolkitCustomizer.renderAvailableTools(response.data);
-                    }
-                }
-            });
-        },
-
-        /**
-         * Affiche la liste des outils disponibles dans les options d'écran
-         */
-        renderAvailableTools: function(tools) {
-            var $container = $('#wp-debug-toolkit-available-tools');
-            $container.empty();
-
-            // Créer un toggle pour chaque outil
-            $.each(tools, function(id, tool) {
-                var isActive = tool.active;
-                var $toolOption = $(
-                    '<label for="wp-debug-toolkit-tool-' + id + '-hide">' +
-                    '<input class="hide-postbox-tog" name="wp-debug-toolkit-tool-' + id + '-hide" ' +
-                    'type="checkbox" id="wp-debug-toolkit-tool-' + id + '-hide" value="' + id + '" ' +
-                    (isActive ? 'checked="checked"' : '') + '>' +
-                    ' ' + tool.title +
-                    '</label>'
-                );
-                $container.append($toolOption);
-            });
-        },
-
-        /**
          * Lie les événements aux éléments
          */
         bindEvents: function() {
-            // Toggle pour montrer/cacher les options d'écran
-            $(document).on('click', '#show-settings-link', function(e) {
-                e.preventDefault();
-                $('#screen-options-wrap').toggleClass('hidden');
-                var isExpanded = $(this).attr('aria-expanded') === 'true';
-                $(this).attr('aria-expanded', !isExpanded);
-            });
-
             // Clic sur les toggles d'outils pour montrer/cacher
             $(document).on('click', '.wp-debug-toolkit-tool-toggle', function(e) {
                 e.preventDefault();
@@ -190,7 +106,8 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        // Optionnel: ajouter un feedback visuel
+                        // Afficher une notification de sauvegarde
+                        WPDebugToolkitCustomizer.showNotification();
                     }
                 }
             });
@@ -202,7 +119,7 @@
         saveScreenOptions: function() {
             var activeTools = {};
 
-            $('.hide-postbox-tog').each(function() {
+            $('input[name^="wp-debug-toolkit-tool-"]').each(function() {
                 var toolId = $(this).val();
                 activeTools[toolId] = $(this).is(':checked');
             });
@@ -237,6 +154,12 @@
                     pref_key: prefKey,
                     pref_value: value,
                     nonce: wp_debug_toolkit_customizer.nonce
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Afficher une notification de sauvegarde
+                        WPDebugToolkitCustomizer.showNotification();
+                    }
                 }
             });
         },
@@ -252,6 +175,25 @@
                 return wp_debug_toolkit_customizer.user_preferences[toolId][prefKey];
             }
             return false;
+        },
+
+        /**
+         * Affiche une notification de sauvegarde
+         */
+        showNotification: function() {
+            var $notification = $('.wp-debug-toolkit-save-notification');
+
+            if ($notification.length === 0) {
+                $notification = $('<div class="wp-debug-toolkit-save-notification">' +
+                    wp_debug_toolkit_customizer.saved_text +
+                    '</div>').appendTo('body');
+            }
+
+            $notification.addClass('show');
+
+            setTimeout(function() {
+                $notification.removeClass('show');
+            }, 2000);
         }
     };
 

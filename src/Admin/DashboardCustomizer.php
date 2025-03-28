@@ -5,9 +5,16 @@ namespace WPDebugToolkit\Admin;
 /**
  * Classe pour gérer la personnalisation du tableau de bord
  */
-
 class DashboardCustomizer
 {
+    /**
+     * Le hook de la page du tableau de bord
+     */
+    private $pageHook;
+
+    /**
+     * Initialisation
+     */
     public function init(): void
     {
         // Ajouter les scripts et styles
@@ -16,7 +23,7 @@ class DashboardCustomizer
         // Ajouter les endpoints AJAX
         add_action('wp_ajax_wp_debug_toolkit_save_tools_order', [$this, 'saveToolsOrder']);
         add_action('wp_ajax_wp_debug_toolkit_save_active_tools', [$this, 'saveActiveTools']);
-        add_action('wp_ajax_wp_debug_toolkit_save_tool_preferences', [$this, 'saveToolsPreferences']);
+        add_action('wp_ajax_wp_debug_toolkit_save_tool_preference', [$this, 'saveToolPreference']);
         add_action('wp_ajax_wp_debug_toolkit_get_available_tools', [$this, 'getAvailableTools']);
 
         // Filtrer les outils affichés sur le tableau de bord
@@ -24,8 +31,100 @@ class DashboardCustomizer
 
         // Ajouter des attributs data aux cartes d'outils
         add_action('wp_debug_toolkit_tool_card_attributes', [$this, 'addToolCardAttributes'], 10, 1);
+
+        // Ajouter du contenu aux options d'écran
+        add_action('admin_init', [$this, 'setupScreenOptions']);
+
+        // Options d'écran pour chaque outil
+        add_filter('screen_settings', [$this, 'addScreenOptions'], 10, 2);
     }
 
+    /**
+     * Configuration des options d'écran
+     */
+    public function setupScreenOptions(): void
+    {
+        // Nous devons connaître le hook de la page pour configurer les options d'écran
+        add_action('toplevel_page_wp-debug-toolkit', [$this, 'setPageHook']);
+        add_action('load-toplevel_page_wp-debug-toolkit', [$this, 'addScreenOptionsTab']);
+    }
+
+    /**
+     * Enregistre le hook de la page
+     */
+    public function setPageHook($hook): void
+    {
+        $this->pageHook = $hook;
+    }
+
+    /**
+     * Ajoute l'onglet des options d'écran
+     */
+    public function addScreenOptionsTab(): void
+    {
+        // Activer les options d'écran pour cette page
+        add_filter('screen_options_show_screen', '__return_true');
+
+        // Obtenir l'objet écran actuel
+        $screen = get_current_screen();
+
+        // Ajouter une aide contextuelle (optionnel mais utile)
+        $screen->add_help_tab([
+            'id'      => 'wp-debug-toolkit-help',
+            'title'   => __('Aide', 'wp-debug-toolkit'),
+            'content' => '<p>' . __('Vous pouvez réorganiser les outils par glisser-déposer ou choisir quels outils afficher dans les options d\'écran.', 'wp-debug-toolkit') . '</p>',
+        ]);
+    }
+
+    /**
+     * Ajoute des options d'écran personnalisées
+     */
+    public function addScreenOptions($screen_settings, $screen): string
+    {
+        // Vérifier si nous sommes sur la bonne page
+        if ($screen->base !== 'toplevel_page_wp-debug-toolkit') {
+            return $screen_settings;
+        }
+
+        // Récupérer les outils disponibles
+        $tools = $this->getAllTools();
+
+        // Récupérer les outils actifs pour l'utilisateur
+        $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
+
+        if (!is_array($activeTools)) {
+            $activeTools = [];
+            foreach ($tools as $toolId => $tool) {
+                $activeTools[$toolId] = $tool['active'];
+            }
+        }
+
+        // Créer les options d'écran pour les outils
+        $output = '<fieldset class="metabox-prefs">';
+        $output .= '<legend>' . __('Outils', 'wp-debug-toolkit') . '</legend>';
+        $output .= '<div id="wp-debug-toolkit-available-tools">';
+
+        foreach ($tools as $toolId => $tool) {
+            $isActive = isset($activeTools[$toolId]) ? $activeTools[$toolId] : true;
+            $output .= '<label>';
+            $output .= '<input type="checkbox" class="hide-postbox-tog" name="wp-debug-toolkit-tool-' . esc_attr($toolId) . '-hide"';
+            $output .= ' value="' . esc_attr($toolId) . '"' . checked($isActive, true, false) . '>';
+            $output .= ' ' . esc_html($tool['title']);
+            $output .= '</label>';
+        }
+
+        $output .= '</div>';
+        $output .= '<button type="button" class="button button-primary" id="wp-debug-toolkit-save-screen-options">';
+        $output .= __('Appliquer', 'wp-debug-toolkit');
+        $output .= '</button>';
+        $output .= '</fieldset>';
+
+        return $screen_settings . $output;
+    }
+
+    /**
+     * Enqueue les assets nécessaires
+     */
     public function enqueueAssets($hook): void
     {
         // Vérifier si nous sommes sur la page du plugin
@@ -36,7 +135,7 @@ class DashboardCustomizer
         // Enqueue jQuery UI et ses dépendances
         wp_enqueue_script('jquery-ui-sortable');
 
-        // Enqueue les scripts et styles
+        // Enqueue le script de personnalisation
         wp_enqueue_script(
             'wp-debug-toolkit-customizer',
             WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/dashboard-customizer.js',
@@ -45,6 +144,7 @@ class DashboardCustomizer
             true
         );
 
+        // Enqueue les styles
         wp_enqueue_style(
             'wp-debug-toolkit-customizer',
             WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/css/dashboard-customizer.css',
@@ -52,18 +152,22 @@ class DashboardCustomizer
             WP_DEBUG_TOOLKIT_VERSION
         );
 
-        // Localiser les scripts
+        // Localiser le script avec les variables et les traductions
         wp_localize_script('wp-debug-toolkit-customizer', 'wp_debug_toolkit_customizer', [
             'nonce' => wp_create_nonce('wp_debug_toolkit_customizer'),
-            'screen_options_text' => __('Options d\'écran', 'wp-debug-toolkit'),
-            'available_tools_text' => __('Outils disponibles', 'wp-debug-toolkit'),
-            'apply_text' => __('Appliquer', 'wp-debug-toolkit'),
+            'saved_text' => __('Modifications enregistrées', 'wp-debug-toolkit'),
             'user_preferences' => $this->getUserToolPreferences()
         ]);
     }
 
+    /**
+     * Ajoute des attributs data aux cartes d'outils pour le JavaScript
+     *
+     * @param string|array $toolId L'ID de l'outil
+     */
     public function addToolCardAttributes($toolId): void
     {
+        // S'assurer que nous avons une chaîne
         if (is_array($toolId)) {
             $toolId = $toolId[0] ?? '';
         }
@@ -71,12 +175,15 @@ class DashboardCustomizer
         echo ' data-tool-id="' . esc_attr($toolId) . '"';
     }
 
+    /**
+     * Filtre les outils affichés sur le tableau de bord en fonction des préférences
+     */
     public function filterDashboardTools(array $tools): array
     {
         // Récupérer les outils actifs pour l'utilisateur
         $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
 
-        // Si aucune préférence n'est définie, utiliser tous les outils
+        // Si aucune préférence n'est enregistrée, utiliser tous les outils
         if (!is_array($activeTools)) {
             return $tools;
         }
@@ -110,9 +217,12 @@ class DashboardCustomizer
         return $filteredTools;
     }
 
+    /**
+     * Sauvegarde l'ordre des outils via AJAX
+     */
     public function saveToolsOrder(): void
     {
-        // Vërifier le nonce
+        // Vérifier le nonce
         if (!check_ajax_referer('wp_debug_toolkit_customizer', 'nonce', false)) {
             wp_send_json_error(['message' => __('Erreur de sécurité', 'wp-debug-toolkit')]);
         }
@@ -127,6 +237,9 @@ class DashboardCustomizer
         wp_send_json_success(['message' => __('Ordre des outils sauvegardé', 'wp-debug-toolkit')]);
     }
 
+    /**
+     * Sauvegarde les outils actifs via AJAX
+     */
     public function saveActiveTools(): void
     {
         // Vérifier le nonce
@@ -137,13 +250,13 @@ class DashboardCustomizer
         // Récupérer et valider les outils actifs
         $activeTools = isset($_POST['active_tools']) ? (array) $_POST['active_tools'] : [];
 
-        // Sanitize les valeurs
+        // Sanitize
         $sanitizedActiveTools = [];
         foreach ($activeTools as $toolId => $isActive) {
             $sanitizedActiveTools[sanitize_key($toolId)] = (bool) $isActive;
         }
 
-        // Sauvegarder les outils actifs dans les métadonnées de l'utilisateur
+        // Sauvegarder dans les métadonnées de l'utilisateur
         update_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', $sanitizedActiveTools);
 
         // Mettre également à jour l'option globale pour les nouveaux utilisateurs
@@ -154,7 +267,10 @@ class DashboardCustomizer
         wp_send_json_success(['message' => __('Outils actifs sauvegardés', 'wp-debug-toolkit')]);
     }
 
-    public function saveToolsPreferences(): void
+    /**
+     * Sauvegarde une préférence utilisateur pour un outil via AJAX
+     */
+    public function saveToolPreference(): void
     {
         // Vérifier le nonce
         if (!check_ajax_referer('wp_debug_toolkit_customizer', 'nonce', false)) {
@@ -164,7 +280,7 @@ class DashboardCustomizer
         // Récupérer et valider les données
         $toolId = isset($_POST['tool_id']) ? sanitize_key($_POST['tool_id']) : '';
         $prefKey = isset($_POST['pref_key']) ? sanitize_key($_POST['pref_key']) : '';
-        $prefValue = isset($_POST['pref_value']) ? sanitize_key($_POST['pref_value']) : '';
+        $prefValue = $_POST['pref_value'] ?? '';
 
         // Valider le bool si c'est un bool
         if ($prefValue === 'true') {
@@ -184,15 +300,18 @@ class DashboardCustomizer
             $preferences[$toolId] = [];
         }
 
-        // Mettre à jour les préférences
+        // Mettre à jour la préférence
         $preferences[$toolId][$prefKey] = $prefValue;
 
-        // Sauvegarder les préférences des outils dans les métadonnées de l'utilisateur
+        // Sauvegarder
         update_user_meta(get_current_user_id(), 'wp_debug_toolkit_tool_preferences', $preferences);
 
         wp_send_json_success(['message' => __('Préférences des outils sauvegardées', 'wp-debug-toolkit')]);
     }
 
+    /**
+     * Récupère tous les outils disponibles via AJAX
+     */
     public function getAvailableTools(): void
     {
         // Vérifier le nonce
@@ -200,8 +319,28 @@ class DashboardCustomizer
             wp_send_json_error(['message' => __('Erreur de sécurité', 'wp-debug-toolkit')]);
         }
 
-        // Récupérer les outils disponibles
-        $tools = apply_filters('wp_debug_toolkit_all_tools', [
+        // Récupérer tous les outils (avant le filtrage)
+        $tools = $this->getAllTools();
+
+        // Récupérer les outils actifs pour l'utilisateur
+        $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
+
+        // Mettre à jour l'état actif des outils
+        if (is_array($activeTools)) {
+            foreach ($tools as $toolId => &$tool) {
+                $tool['active'] = isset($activeTools[$toolId]) && (bool) $activeTools[$toolId];
+            }
+        }
+
+        wp_send_json_success($tools);
+    }
+
+    /**
+     * Récupère tous les outils disponibles
+     */
+    private function getAllTools(): array
+    {
+        return apply_filters('wp_debug_toolkit_all_tools', [
             'elementor-block-analyzer' => [
                 'title' => __('Analyseur de blocs Elementor', 'wp-debug-toolkit'),
                 'description' => __('Analyse l\'utilisation des widgets Elementor sur le site', 'wp-debug-toolkit'),
@@ -251,20 +390,11 @@ class DashboardCustomizer
                 'active' => true
             ],
         ]);
-
-        // Récupérer les outils actifs pour l'utilisateur
-        $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
-
-        // Mettre à jour l'état actif des outils
-        if (is_array($activeTools)) {
-            foreach ($tools as $toolId => &$tool) {
-                $tool['active'] = isset($activeTools[$toolId]) && (bool) $activeTools[$toolId];
-            }
-        }
-
-        wp_send_json_success($tools);
     }
 
+    /**
+     * Récupère les préférences utilisateur pour tous les outils
+     */
     private function getUserToolPreferences(): array
     {
         $preferences = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_tool_preferences', true);
