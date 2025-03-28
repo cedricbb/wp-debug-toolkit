@@ -195,13 +195,20 @@ class ToolManager
         // Récupérer tous les outils disponibles
         $tools = $this->getAllAvailableTools();
 
-        // Initialiser le tableau des outils actifs
+        // Initialiser le tableau des outils actifs à tous désactivés
         $activeTools = [];
-
-        // Parcourir tous les outils et vérifier lesquels sont cochés
         foreach ($tools as $toolId => $tool) {
-            $fieldName = 'wp-debug-toolkit-tool-' . $toolId . '-hide';
-            $activeTools[$toolId] = isset($_POST[$fieldName]) ? true : false;
+            $activeTools[$toolId] = false;
+        }
+
+        // Parcourir les outils soumis et les marquer comme actifs
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, 'wp-debug-toolkit-tool-') === 0) {
+                $toolId = $value; // La valeur du champ est maintenant l'ID de l'outil
+                if (isset($tools[$toolId])) {
+                    $activeTools[$toolId] = true;
+                }
+            }
         }
 
         // Sauvegarder les préférences
@@ -269,10 +276,10 @@ class ToolManager
         $output .= '<div id="wp-debug-toolkit-available-tools">';
 
         foreach ($tools as $toolId => $tool) {
-            $isActive = isset($activeTools[$toolId]) ? $activeTools[$toolId] : true;
+            $isActive = $activeTools[$toolId] ?? true;
             $output .= '<label>';
-            $output .= '<input type="checkbox" name="wp-debug-toolkit-tool-' . esc_attr($toolId) . '-hide"';
-            $output .= ' value="1"' . checked($isActive, true, false) . '>';
+            $output .= '<input type="checkbox" name="wp-debug-toolkit-tool-' . esc_attr($toolId) . '"';
+            $output .= ' value="' . esc_attr($toolId) . '"' . checked($isActive, true, false) . '>';
             $output .= ' ' . esc_html($tool['title']);
             $output .= '</label>';
         }
@@ -326,7 +333,7 @@ class ToolManager
     {
         // S'assurer que nous avons une chaîne
         if (is_array($toolId)) {
-            $toolId = isset($toolId[0]) ? $toolId[0] : '';
+            $toolId = $toolId[0] ?? '';
         }
 
         echo ' data-tool-id="' . esc_attr($toolId) . '"';
@@ -340,15 +347,33 @@ class ToolManager
         // Récupérer les outils actifs pour l'utilisateur
         $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
 
-        // Si aucune préférence n'est enregistrée, utiliser tous les outils
+        // Forcer le format array
         if (!is_array($activeTools)) {
-            return $tools;
+            $activeTools = [];
+        }
+
+        // Vérifier que les clés correspondent aux IDs des outils
+        $hasValidKeys = false;
+        foreach (array_keys($activeTools) as $key) {
+            if (isset($tools[$key])) {
+                $hasValidKeys = true;
+                break;
+            }
+        }
+
+        // Si aucune clé valide, réinitialiser les préférences
+        if (!$hasValidKeys) {
+            $activeTools = [];
+            foreach ($tools as $toolId => $tool) {
+                $activeTools[$toolId] = true;
+            }
+            update_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', $activeTools);
         }
 
         // Filtrer les outils en ne gardant que ceux qui sont actifs
         $filteredTools = [];
         foreach ($tools as $toolId => $tool) {
-            if (isset($activeTools[$toolId]) && $activeTools[$toolId]) {
+            if (!isset($activeTools[$toolId]) || $activeTools[$toolId]) {
                 $filteredTools[$toolId] = $tool;
             }
         }
@@ -460,10 +485,17 @@ class ToolManager
         // Récupérer et valider les outils actifs
         $activeTools = isset($_POST['active_tools']) ? (array) $_POST['active_tools'] : [];
 
-        // Sanitize
+        // Récupérer tous les outils disponibles
+        $tools = $this->getAllAvailableTools();
+
+        // Initialiser le tableau des outils actifs à tous désactivés
         $sanitizedActiveTools = [];
-        foreach ($activeTools as $toolId => $isActive) {
-            $sanitizedActiveTools[sanitize_key($toolId)] = (bool) $isActive;
+        foreach ($tools as $toolId => $tool) {
+            $sanitizedActiveTools[$toolId] = isset($activeTools[$toolId]) &&
+                ($activeTools[$toolId] === true ||
+                    $activeTools[$toolId] === 'true' ||
+                    $activeTools[$toolId] === '1' ||
+                    $activeTools[$toolId] === 1);
         }
 
         // Sauvegarder dans les métadonnées de l'utilisateur
@@ -490,7 +522,7 @@ class ToolManager
         // Récupérer et valider les données
         $toolId = isset($_POST['tool_id']) ? sanitize_key($_POST['tool_id']) : '';
         $prefKey = isset($_POST['pref_key']) ? sanitize_key($_POST['pref_key']) : '';
-        $prefValue = isset($_POST['pref_value']) ? $_POST['pref_value'] : '';
+        $prefValue = $_POST['pref_value'] ?? '';
 
         // Valider le bool si c'est un bool
         if ($prefValue === 'true') {
@@ -538,7 +570,7 @@ class ToolManager
         // Mettre à jour l'état actif des outils
         if (is_array($activeTools)) {
             foreach ($tools as $toolId => &$tool) {
-                $tool['active'] = isset($activeTools[$toolId]) ? (bool) $activeTools[$toolId] : false;
+                $tool['active'] = isset($activeTools[$toolId]) && $activeTools[$toolId];
             }
         }
 

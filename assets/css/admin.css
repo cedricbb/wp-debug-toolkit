@@ -277,6 +277,22 @@
 }
 
 /*--------------------------------------------------------------
+# Pied de page
+--------------------------------------------------------------*/
+.wp-debug-toolkit-footer {
+    margin-top: 30px;
+    padding: 15px 0;
+    border-top: 1px solid var(--wp-debug-gray);
+    text-align: center;
+    color: var(--wp-debug-dark-gray);
+    font-size: 12px;
+}
+
+.wp-debug-toolkit-footer .dashicons {
+    color: #dc3232;
+    vertical-align: middle;
+}
+/*--------------------------------------------------------------
 # Responsive
 --------------------------------------------------------------*/
 @media screen and (max-width: 782px) {

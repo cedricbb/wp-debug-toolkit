@@ -79,10 +79,50 @@
                 WPDebugToolkitCustomizer.saveToolUserPreference(toolId, 'hidden', !isHidden);
             });
 
-            // Enregistrement des options d'écran
+            // Traitement AJAX complémentaire pour les options d'écran
             $(document).on('click', '#wp-debug-toolkit-save-screen-options', function(e) {
-                e.preventDefault();
-                WPDebugToolkitCustomizer.saveScreenOptions();
+                // Ne pas appeler preventDefault() ici pour permettre la soumission du formulaire
+
+                // Collecter les outils actifs pour AJAX
+                var activeTools = {};
+
+                // Parcourir toutes les checkboxes et récupérer leur état
+                $('#wp-debug-toolkit-available-tools input[type="checkbox"]').each(function() {
+                    var toolId = $(this).val();
+
+                    // S'assurer que l'ID est correct
+                    if (!toolId || toolId === "1") {
+                        // Essayer d'extraire l'ID à partir du nom
+                        var nameMatch = $(this).attr('name').match(/wp-debug-toolkit-tool-(.*?)$/);
+                        if (nameMatch && nameMatch[1]) {
+                            toolId = nameMatch[1];
+                        }
+                    }
+
+                    if (toolId && toolId !== "1") {
+                        activeTools[toolId] = $(this).is(':checked');
+                    }
+                });
+
+                // Afficher un feedback visuel
+                WPDebugToolkitCustomizer.showNotification();
+
+                // Log pour debug
+                console.log('Tools to save via AJAX:', activeTools);
+
+                // Envoyer les données via AJAX en parallèle
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: {
+                        action: 'wp_debug_toolkit_save_active_tools',
+                        active_tools: activeTools,
+                        nonce: wp_debug_toolkit_customizer.nonce
+                    },
+                    success: function(response) {
+                        console.log('AJAX response:', response);
+                    }
+                });
             });
         },
 
@@ -108,34 +148,6 @@
                     if (response.success) {
                         // Afficher une notification de sauvegarde
                         WPDebugToolkitCustomizer.showNotification();
-                    }
-                }
-            });
-        },
-
-        /**
-         * Enregistre les options d'écran (outils actifs/inactifs)
-         */
-        saveScreenOptions: function() {
-            var activeTools = {};
-
-            $('input[name^="wp-debug-toolkit-tool-"]').each(function() {
-                var toolId = $(this).val();
-                activeTools[toolId] = $(this).is(':checked');
-            });
-
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'wp_debug_toolkit_save_active_tools',
-                    active_tools: activeTools,
-                    nonce: wp_debug_toolkit_customizer.nonce
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Recharger la page pour afficher les changements
-                        window.location.reload();
                     }
                 }
             });
