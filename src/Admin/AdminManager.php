@@ -98,7 +98,7 @@ class AdminManager
                 'wp-debug-toolkit-admin-js',
                 WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/admin.js',
                 [],
-                WP_DEBUG_TOOLKIT_VERSION,
+                WP_DEBUG_TOOLKIT_VERSION . '-' . time(),
                 true
             );
 
