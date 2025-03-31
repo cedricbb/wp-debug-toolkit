@@ -50,30 +50,17 @@ class ElementorBlockAnalyzer extends AbstractTool
         if (str_contains($hook, 'wp-debug-toolkit') || $hook === 'toplevel_page_wp-debug-toolkit') {
             // Enqueue CSS
             wp_enqueue_style(
-                'elementor-block-analyzer-table-css',
-                WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'assets/css/tools/elementor-block-analyzer/table.css',
-                [],
-                WP_DEBUG_TOOLKIT_VERSION . '-' . time()
-            );
-            wp_enqueue_style(
-                'elementor-block-analyzer-widget-details-css',
-                WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'assets/css/tools/elementor-block-analyzer/details.css',
+                'elementor-block-analyzer-css',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/css/tools/ElementorBlockAnalyzer/elementor-block-analyzer.css',
                 [],
                 WP_DEBUG_TOOLKIT_VERSION . '-' . time()
             );
 
             // Enregistrement des scripts
             wp_enqueue_script(
-                'elementor-block-analyzer-table-js',
-                WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'assets/js/elementor-block-analyzer-table.js',
+                'elementor-block-analyzer-js',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/tools/ElementorBlockAnalyzer/elementor-block-analyzer.js',
                 ['jquery', 'thickbox'],
-                WP_DEBUG_TOOLKIT_VERSION . '-' . time(),
-                true
-            );
-            wp_enqueue_script(
-                'elementor-block-analyzer-widget-details-js',
-                WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'assets/js/elementor-block-analyzer-widget-details.js',
-                ['jquery', 'thickbox', 'postbox'],
                 WP_DEBUG_TOOLKIT_VERSION . '-' . time(),
                 true
             );
@@ -264,20 +251,20 @@ class ElementorBlockAnalyzer extends AbstractTool
 
     public function renderContent(): void
     {
-        $widgets = $this->analyzer->getElementorWidgets();
-        $table = new ElementorWidgetsTable($widgets);
-        $table->prepare_items();
+        try {
+            // Préparer les données pour la vue
+            $widgets = $this->analyzer->getElementorWidgets();
+            $table = new ElementorWidgetsTable($widgets);
+            $table->prepare_items();
 
-        ?>
-        <div class="wrap">
-            <form method="post">
-                <?php $table->display(); ?>
-            </form>
-        </div>
-        <?php
-
-        // Inclure la vue de l'outil
-        include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Tool/ElementorBlockAnalyzer/View/content.php';
+            // Passer les variables à la vue (table et autres données)
+            include WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'src/Tool/ElementorBlockAnalyzer/View/content.php';
+        } catch (\Throwable $e) {
+            // Gérer l'erreur
+            echo '<div class="notice notice-error"><p>';
+            echo 'Erreur lors de l\'analyse des widgets Elementor: ' . esc_html($e->getMessage());
+            echo '</p></div>';
+        }
     }
 
     public function analyzeElementorBlock(): void

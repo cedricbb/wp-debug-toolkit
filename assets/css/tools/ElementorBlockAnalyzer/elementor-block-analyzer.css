@@ -1,0 +1,57 @@
+.wp-debug-toolkit-elementor-analyzer .button-crayola {
+    color: #fff;
+    border-color: var(--wp-debug-primary);
+    background: var(--wp-debug-primary);
+    box-shadow: none;
+    margin: 10px 0;
+}
+
+.wp-debug-toolkit-elementor-analyzer .button-crayola:hover {
+    color: #fff;
+    border-color: var(--wp-debug-secondary);
+    background: var(--wp-debug-secondary);
+    box-shadow: none;
+}
+
+.wp-debug-toolkit-elementor-analyzer .button-crayola .dashicons {
+    vertical-align:middle;
+}
+
+.wp-debug-toolkit-elementor-analyzer .elementor-analyzer-filters {
+    margin: 10px 0 20px 0;
+}
+
+.elementor-analyzer-table-container .button {
+    border-color: var(--wp-debug-primary);
+    color: var(--wp-debug-primary);
+}
+
+.elementor-analyzer-table-container .button:hover {
+    border-color: var(--wp-debug-secondary);
+    color: var(--wp-debug-secondary);
+}
+
+.elementor-analyzer-table-container .wp-list-table a {
+    color: var(--wp-debug-secondary);
+}
+
+.elementor-analyzer-table-container .wp-list-table #total_uses {
+    width: 5%;
+}
+
+.elementor-analyzer-table-container .wp-list-table #posts {
+    width: 20%;
+    text-align: left;
+}
+
+.elementor-analyzer-table-container .wp-list-table #the-list .posts {
+    text-align: left;
+}
+
+.elementor-analyzer-table-container .wp-list-table #the-list a {
+    color: var(--wp-debug-secondary);
+}
+
+.elementor-analyzer-table-container .wp-list-table #the-list .dashicons {
+    color: var(--wp-debug-primary);
+}

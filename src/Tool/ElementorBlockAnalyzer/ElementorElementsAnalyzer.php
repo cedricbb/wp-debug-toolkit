@@ -35,7 +35,7 @@ class ElementorElementsAnalyzer
             ]
         ]);
 
-        $query = new WP_Query($args);
+        $query = new \WP_Query($args);
 
         if ($query->have_posts()) {
             while ($query->have_posts()) {

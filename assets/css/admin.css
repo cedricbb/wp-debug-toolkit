@@ -276,6 +276,10 @@
     border-color: var(--wp-debug-secondary);
 }
 
+#screen-meta #wp-debug-toolkit-save-screen-options:focus {
+    box-shadow: none;
+}
+
 /*--------------------------------------------------------------
 # Pied de page
 --------------------------------------------------------------*/

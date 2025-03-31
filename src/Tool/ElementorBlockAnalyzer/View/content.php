@@ -19,7 +19,6 @@ $actionUrl = admin_url('admin-ajax.php?action=wp_debug_toolkit_analyze_elementor
 
 <div class="wrap wp-debug-toolkit-elementor-analyzer">
     <div class="elementor-analyzer-header">
-        <h2><?php echo esc_html($this->getTitle()); ?></h2>
         <p class="description"><?php echo esc_html($this->getDescription()); ?></p>
     </div>
 
