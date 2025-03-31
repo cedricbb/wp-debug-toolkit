@@ -94,9 +94,9 @@ class ElementorBlockAnalyzer extends AbstractTool
                 'ajaxurl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('widget_details'),
                 'strings' => [
-                    'modalTitle' => __('Détails du Widget', 'cc-debug-tool'),
-                    'loading' => __('Chargement...', 'cc-debug-tool'),
-                    'error' => __('Erreur lors du chargement des détails', 'cc-debug-tool')
+                    'modalTitle' => __('Détails du Widget', 'wp-debug-toolkit'),
+                    'loading' => __('Chargement...', 'wp-debug-toolkit'),
+                    'error' => __('Erreur lors du chargement des détails', 'wp-debug-toolkit')
                 ]
             ]
         );
@@ -151,102 +151,14 @@ class ElementorBlockAnalyzer extends AbstractTool
             'icon' => ElementorHelper::getWidgetIcon($widgetName),
             'total_uses' => StatsHelper::calculateTotalUses($data),
             'average_uses' => StatsHelper::calculateAverageUsesPerPage($data),
-            'usage_history' => $this->getUsageHistory($data),
+            'usage_history' => DateHelper::getUsageHistory($data),
             'instance' => $widgetInstance
         ];
         // Ajouter la date de première utilisation
-        $firstUseDate = $this->getFirstUseDate($data);
-        $preparedData['first_usage'] = $firstUseDate ? date_i18n('F Y', $firstUseDate) : __('Aucune utilisation', 'cc-debug-tool');
+        $firstUseDate = DateHelper::getFirstUseDate($data);
+        $preparedData['first_usage'] = $firstUseDate ? date_i18n('F Y', $firstUseDate) : __('Aucune utilisation', 'wp-debug-toolkit');
         // Fusionner avec les données originales
         return array_merge($data, $preparedData);
-    }
-
-    /**
-     * Obtient la date de première utilisation
-     */
-    private function getFirstUseDate(array $data): ?int
-    {
-        $dates = [];
-
-        foreach (['posts', 'templates', 'popups'] as $type) {
-            if (!empty($data[$type])) {
-                foreach (array_keys($data[$type]) as $postId) {
-                    $postTime = get_post_time('U', false, $postId);
-                    if ($postTime) {
-                        $dates[] = $postTime;
-                    }
-                }
-            }
-        }
-
-        if (!empty($data['theme_elements'])) {
-            foreach (array_keys($data['theme_elements']) as $elementId) {
-                $elementTime = get_post_time('U', false, $elementId);
-                if ($elementTime) {
-                    $dates[] = $elementTime;
-                }
-            }
-        }
-
-        return !empty($dates) ? min($dates) : null;
-    }
-
-    /**
-     * Obtient l'historique d'utilisation
-     */
-    private function getUsageHistory(array $data): array
-    {
-        $usageByMonth = DateHelper::initializeLast12Months();
-        $currentYear = date('Y');
-        $currentMonth = date('m');
-
-        foreach (['posts', 'templates', 'popups'] as $type) {
-            if (!empty($data[$type])) {
-                foreach (array_keys($data[$type]) as $postId) {
-                    $postDate = get_the_date('Y-m', $postId);
-                    if ($postDate) {
-                        $year = substr($postDate, 0, 4);
-                        $month = substr($postDate, 5, 2);
-
-                        if (DateHelper::isWithinLast12Months($year, $month, $currentYear, $currentMonth)
-                            && isset($usageByMonth[$postDate])) {
-                            $usageByMonth[$postDate]++;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!empty($data['theme_elements'])) {
-            foreach (array_keys($data['theme_elements']) as $elementId) {
-                $elementDate = get_the_date('Y-m', $elementId);
-                if ($elementDate) {
-                    $year = substr($elementDate, 0, 4);
-                    $month = substr($elementDate, 5, 2);
-
-                    if (DateHelper::isWithinLast12Months($year, $month, $currentYear, $currentMonth)
-                        && isset($usageByMonth[$elementDate])) {
-                        $usageByMonth[$elementDate]++;
-                    }
-                }
-            }
-        }
-
-        return $this->formatUsageHistory($usageByMonth);
-    }
-
-    /**
-     * Formate l'historique d'utilisation
-     */
-    private function formatUsageHistory(array $usageByMonth): array
-    {
-        $formattedHistory = [];
-        foreach ($usageByMonth as $yearMonth => $count) {
-            $timestamp = strtotime($yearMonth . '-01');
-            $formattedMonth = date_i18n('M Y', $timestamp);
-            $formattedHistory[$formattedMonth] = $count;
-        }
-        return $formattedHistory;
     }
 
     public function renderContent(): void

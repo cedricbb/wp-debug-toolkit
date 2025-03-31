@@ -29,10 +29,10 @@ final class ElementorWidgetsTable extends WP_List_Table
             'elementorWidgetsTableL10n',
             [
                 'showMore' => [
-                    'singular' => __('Voir %d élément de plus', 'cc-debug-tool'),
-                    'plural' => __('Voir %d éléments de plus', 'cc-debug-tool')
+                    'singular' => __('Voir %d élément de plus', 'wp-debug-toolkit'),
+                    'plural' => __('Voir %d éléments de plus', 'wp-debug-toolkit')
                 ],
-                'showLess' => __('Voir moins', 'cc-debug-tool')
+                'showLess' => __('Voir moins', 'wp-debug-toolkit')
             ]
         );
     }
@@ -212,8 +212,8 @@ final class ElementorWidgetsTable extends WP_List_Table
                    id="widget-search-input"
                    name="s"
                    value="<?php echo esc_attr($this->searchQuery); ?>"
-                   placeholder="<?php esc_attr_e('Rechercher un widget...', 'cc-debug-tool'); ?>"/>
-            <?php submit_button(__('Rechercher', 'cc-debug-tool'), '', 'submit', false); ?>
+                   placeholder="<?php esc_attr_e('Rechercher un widget...', 'wp-debug-toolkit'); ?>"/>
+            <?php submit_button(__('Rechercher', 'wp-debug-toolkit'), '', 'submit', false); ?>
         </div>
         <?php
     }
@@ -238,12 +238,12 @@ final class ElementorWidgetsTable extends WP_List_Table
     {
         return [
             'cb' => '<input type="checkbox" />',
-            'widget' => __('Widget', 'cc-debug-tool'),
-            'posts' => __('Pages/Posts', 'cc-debug-tool'),
-            'templates' => __('Templates', 'cc-debug-tool'),
-            'popups' => __('Popups', 'cc-debug-tool'),
-            'theme_elements' => __('Éléments de thème', 'cc-debug-tool'),
-            'total_uses' => __('Total', 'cc-debug-tool'),
+            'widget' => __('Widget', 'wp-debug-toolkit'),
+            'posts' => __('Pages/Posts', 'wp-debug-toolkit'),
+            'templates' => __('Templates', 'wp-debug-toolkit'),
+            'popups' => __('Popups', 'wp-debug-toolkit'),
+            'theme_elements' => __('Éléments de thème', 'wp-debug-toolkit'),
+            'total_uses' => __('Total', 'wp-debug-toolkit'),
         ];
     }
 
@@ -269,7 +269,7 @@ final class ElementorWidgetsTable extends WP_List_Table
             'view' => sprintf(
                 '<a href="#" class="widget-details-link" data-widget="%s">%s</a>',
                 esc_attr($item['widget']),
-                __('Voir les détails', 'cc-debug-tool')
+                __('Voir les détails', 'wp-debug-toolkit')
             )
         ];
 
@@ -325,7 +325,7 @@ final class ElementorWidgetsTable extends WP_List_Table
                         'Voir %d élément de plus',
                         'Voir %d éléments de plus',
                         $remaining,
-                        'cc-debug-tool'
+                        'wp-debug-toolkit'
                     ),
                     $remaining
                 )
@@ -407,7 +407,7 @@ final class ElementorWidgetsTable extends WP_List_Table
                         'Voir %d élément de plus',
                         'Voir %d éléments de plus',
                         $remaining,
-                        'cc-debug-tool'
+                        'wp-debug-toolkit'
                     ),
                     $remaining
                 )
@@ -469,7 +469,7 @@ final class ElementorWidgetsTable extends WP_List_Table
      */
     public function no_items(): void
     {
-        esc_html_e('Aucun widget Elementor trouvé.', 'cc-debug-tool');
+        esc_html_e('Aucun widget Elementor trouvé.', 'wp-debug-toolkit');
     }
 
     /**

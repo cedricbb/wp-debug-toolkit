@@ -23,7 +23,7 @@ class ElementorElementsAnalyzer
     {
         $widgets = [];
 
-        $args = apply_filters('cc-debug-tool/includes/Tools/ElementorElements/ElementorElementsAnalyzer/getElementorWidgets', [
+        $args = apply_filters('wp-debug-toolkit/includes/Tools/ElementorElements/ElementorElementsAnalyzer/getElementorWidgets', [
             'post_type' => ['post', 'page', 'elementor_library'],
             'posts_per_page' => -1,
             'post_status' => ['publish', 'draft', 'private'],
