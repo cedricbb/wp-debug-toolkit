@@ -2,6 +2,7 @@
 
 namespace WPDebugToolkit\Tool\ElementorBlockAnalyzer;
 
+use Elementor\Plugin;
 use WP_List_Table;
 use WPDebugToolkit\Util\ElementorHelper;
 
@@ -147,7 +148,7 @@ final class ElementorWidgetsTable extends WP_List_Table
         if (!class_exists('\Elementor\Plugin')) {
             return 'eicon-cog';
         }
-        $widget_manager = \Elementor\Plugin::instance()->widgets_manager;
+        $widget_manager = Plugin::instance()->widgets_manager;
         $widget = $widget_manager->get_widget_types($widget_name);
 
         if (!$widget) {

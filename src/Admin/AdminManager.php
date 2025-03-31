@@ -9,6 +9,7 @@ namespace WPDebugToolkit\Admin;
 use WPDebugToolkit\Admin\Page\Dashboard;
 use WPDebugToolkit\Admin\Page\Settings;
 use WPDebugToolkit\Admin\Page\About;
+use WPDebugToolkit\Tool\ToolManager;
 
 /**
  * Classe pour gérer l'interface d'administration
@@ -104,13 +105,13 @@ class AdminManager
 
             // Localiser le script avec des données
             wp_localize_script(
-                'wp-debug-toolkit-admin',
-                'wpDebugToolkit',
+                'wp-debug-toolkit-admin-js',
+                'wp_debug_toolkit_customizer',
                 [
                     'ajaxUrl' => admin_url('admin-ajax.php'),
-                    'nonce' => wp_create_nonce('wp-debug-toolkit-nonce'),
-                    'loading' => __('Chargement...', 'wp-debug-toolkit'),
-                    'error' => __('Une erreur s\'est produite. Veuillez réessayer.', 'wp-debug-toolkit')
+                    'nonce' => wp_create_nonce('wp_debug_toolkit_customizer'),
+                    'saved_text' => __('Modifications enregistrées', 'wp-debug-toolkit'),
+                    'user_preferences' => ToolManager::getUserToolPreferences()
                 ]
             );
         }
