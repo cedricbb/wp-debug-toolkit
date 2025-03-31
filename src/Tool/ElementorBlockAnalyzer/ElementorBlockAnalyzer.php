@@ -88,7 +88,7 @@ class ElementorBlockAnalyzer extends AbstractTool
     {
         // Localisation pour JavaScript
         wp_localize_script(
-            'cc-widget-details',
+            'wp-debug-toolkit-widget-details',
             'ccWidgetVars',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),

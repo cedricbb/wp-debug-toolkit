@@ -25,7 +25,7 @@ final class ElementorWidgetsTable extends WP_List_Table
         $this->filteredData = $this->prepareFilteredData();
 
         wp_localize_script(
-            'cc-elementor-table',
+            'elementor-block-analyzer',
             'elementorWidgetsTableL10n',
             [
                 'showMore' => [
@@ -298,7 +298,7 @@ final class ElementorWidgetsTable extends WP_List_Table
         $initial_display = 3;
 
         $output = '<div class="elements-container">';
-        $output .= '<ul class="cc-widget-pages-list">';
+        $output .= '<ul class="wp-debug-toolkit-widget-pages-list">';
 
         $i = 0;
         foreach ($posts as $post_id => $post_title) {
@@ -349,7 +349,7 @@ final class ElementorWidgetsTable extends WP_List_Table
         $count = count($elements);
 
         $output = '<div class="elements-container">';
-        $output .= '<ul class="cc-widget-theme-elements-list">';
+        $output .= '<ul class="wp-debug-toolkit-widget-theme-elements-list">';
 
         $i = 0;
         foreach ($elements as $element_id => $element) {

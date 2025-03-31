@@ -32,7 +32,7 @@
 }
 
 .elementor-analyzer-table-container .wp-list-table a {
-    color: var(--wp-debug-secondary);
+    color: var(--wp-debug-dark-gray);
 }
 
 .elementor-analyzer-table-container .wp-list-table #total_uses {
@@ -49,9 +49,17 @@
 }
 
 .elementor-analyzer-table-container .wp-list-table #the-list a {
-    color: var(--wp-debug-secondary);
+    color: var(--wp-debug-dark-gray);
 }
 
 .elementor-analyzer-table-container .wp-list-table #the-list .dashicons {
     color: var(--wp-debug-primary);
+}
+
+.elementor-analyzer-table-container .wp-list-table #the-list .widget-name-container i {
+    color: var(--wp-debug-primary);
+}
+
+.elementor-analyzer-table-container .wp-list-table #the-list .wp-debug-toolkit-widget-pages-list .hidden-element {
+    display: none;
 }

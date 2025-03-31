@@ -29,7 +29,7 @@ $actionUrl = admin_url('admin-ajax.php?action=wp_debug_toolkit_analyze_elementor
     <?php else: ?>
         <div class="elementor-analyzer-content">
             <div class="elementor-analyzer-controls">
-                <button id="refresh-analysis" class="button button-primary">
+                <button id="refresh-analysis" class="button button-crayola">
                     <span class="dashicons dashicons-update"></span>
                     <?php _e('Actualiser l\'analyse', 'wp-debug-toolkit'); ?>
                 </button>
