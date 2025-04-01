@@ -74,7 +74,7 @@
 }
 
 .elementor-analyzer-table-container .wp-list-table thead th a, .elementor-analyzer-table-container .wp-list-table tfoot th a {
-    color: var(--wp-debug-dark-gray);
+    color: var(--wp-debug-primary);
 }
 
 .elementor-analyzer-table-container .wp-list-table .wp-debug-toolkit-widget-pages-list a {

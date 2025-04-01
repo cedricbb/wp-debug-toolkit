@@ -55,12 +55,25 @@ class ElementorBlockAnalyzer extends AbstractTool
                 [],
                 WP_DEBUG_TOOLKIT_VERSION . '-' . time()
             );
+            wp_enqueue_style(
+                'elementor-block-analyzer-widget-details-css',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/css/tools/ElementorBlockAnalyzer/elementor-block-analyzer-widget-details.css',
+                [],
+                WP_DEBUG_TOOLKIT_VERSION . '-' . time()
+            );
 
             // Enregistrement des scripts
             wp_enqueue_script(
                 'elementor-block-analyzer-js',
                 WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/tools/ElementorBlockAnalyzer/elementor-block-analyzer.js',
                 ['jquery', 'thickbox'],
+                WP_DEBUG_TOOLKIT_VERSION . '-' . time(),
+                true
+            );
+            wp_enqueue_script(
+                'elementor-block-analyzer-widget-detail',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/tools/ElementorBlockAnalyzer/elementor-block-analyzer-widget-detail.js',
+                ['jquery', 'thickbox', 'postbox'],
                 WP_DEBUG_TOOLKIT_VERSION . '-' . time(),
                 true
             );
@@ -88,8 +101,8 @@ class ElementorBlockAnalyzer extends AbstractTool
     {
         // Localisation pour JavaScript
         wp_localize_script(
-            'wp-debug-toolkit-widget-details',
-            'ccWidgetVars',
+            'elementor-block-analyzer-widget-detail',
+            'WPDebugWidgetVars',
             [
                 'ajaxurl' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('widget_details'),
@@ -105,7 +118,7 @@ class ElementorBlockAnalyzer extends AbstractTool
     public function ajaxGetWidgetDetails(): void
     {
         // Vérifier le nonce
-        check_ajax_referer('wp_debug_toolkit_widget_details', 'nonce');
+        check_ajax_referer('widget_details', 'nonce');
 
         $widgetName = sanitize_text_field($_GET['widget'] ?? '');
 
@@ -177,21 +190,5 @@ class ElementorBlockAnalyzer extends AbstractTool
             echo 'Erreur lors de l\'analyse des widgets Elementor: ' . esc_html($e->getMessage());
             echo '</p></div>';
         }
-    }
-
-    public function analyzeElementorBlock(): void
-    {
-        // Vérifie le nonce
-        check_ajax_referer('wp_debug_toolkit_' . $this->id . '_action', 'nonce');
-
-        // Analyser les blocs Elementor
-        $blocks = ElementorHelper::getAllElementorWidgets();
-        $usage = ElementorHelper::analyzeWidgetUsage();
-
-        // Retourner les résultats
-        wp_send_json_success(array(
-            'blocks' => $blocks,
-            'usage' => $usage
-        ));
     }
 }

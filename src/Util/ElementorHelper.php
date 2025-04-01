@@ -141,4 +141,16 @@ class ElementorHelper
         $icon = $widget->get_icon();
         return empty($icon) ? 'eicon-cog' : $icon;
     }
+
+    public static function getWidgetTypeLabel(mixed $type)
+    {
+        return match($type) {
+            'header' => __('En-tête', 'wp-debug-toolkit'),
+            'footer' => __('Pied de page', 'wp-debug-toolkit'),
+            '404' => __('Page 404', 'wp-debug-toolkit'),
+            'single' => __('Article', 'wp-debug-toolkit'),
+            'archive' => __('Archive', 'wp-debug-toolkit'),
+            default => $type
+        };
+    }
 }
