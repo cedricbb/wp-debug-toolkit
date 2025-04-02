@@ -1,6 +1,6 @@
 # 🛠️ WordPress Debug Toolkit
 
-![Versions](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Versions](https://img.shields.io/badge/version-1.5.3-blue.svg)
 ![WordPress](https://img.shields.io/badge/WordPress-6.7%2B-green.svg)
 ![PHP](https://img.shields.io/badge/PHP-.8.1%2B-purple.svg)
 ![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)

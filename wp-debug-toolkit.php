@@ -3,7 +3,7 @@
  * Plugin Name: WP Debug Toolkit
  * Plugin URI: https://github.com/cedricbb/wp-debug-toolkit
  * Description: A collection of tools to help debug WordPress and Elementor.
- * Version: 1.5.2
+ * Version: 1.5.3
  * Author: Cedric Billard
  * Author URI: https://github.com/cedricbb
  * Text Domain: wp-debug-toolkit
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Définition des constantes
-const WP_DEBUG_TOOLKIT_VERSION = '1.5.2';
+const WP_DEBUG_TOOLKIT_VERSION = '1.5.3';
 define('WP_DEBUG_TOOLKIT_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WP_DEBUG_TOOLKIT_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WP_DEBUG_TOOLKIT_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -41,8 +41,8 @@ if (file_exists(WP_DEBUG_TOOLKIT_PLUGIN_DIR . 'vendor/autoload.php')) {
 use WPDebugToolkit\Core\Plugin;
 
 // Hooks d'activation, de désactivation et de désinstallation
-register_activation_hook(__FILE__, array('WPDebugToolkit', 'activate'));
-register_deactivation_hook(__FILE__, array('WPDebugToolkit', 'deactivate'));
+register_activation_hook(__FILE__, array('WPDebugToolkit\Core\Plugin', 'activate'));
+register_deactivation_hook(__FILE__, array('WPDebugToolkit\Core\Plugin', 'deactivate'));
 
 // Démarrer le plugin
 add_action('plugins_loaded', function () {
