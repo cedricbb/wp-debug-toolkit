@@ -3,7 +3,7 @@
     --wp-debug-primary: #ef476f;
     --wp-debug-secondary: #C2095A;
     --wp-debug-success: #46b450;
-    --wp-debug-warning: #ffb900;
+    --wp-debug-warning: #ffa033;
     --wp-debug-error: #dc3232;
     --wp-debug-light-gray: #f7f7f7;
     --wp-debug-gray: #e5e5e5;
@@ -18,6 +18,10 @@
 --------------------------------------------------------------*/
 .wp-debug-toolkit-wrapper {
     padding: 0;
+}
+
+.wp-debug-toolkit-wrapper h1 {
+    display: flex!important;
 }
 
 /* En-tête */
@@ -274,6 +278,10 @@
 #screen-meta #wp-debug-toolkit-save-screen-options:hover {
     background-color: var(--wp-debug-secondary);
     border-color: var(--wp-debug-secondary);
+}
+
+#screen-meta #wp-debug-toolkit-save-screen-options:focus {
+    box-shadow: none;
 }
 
 /*--------------------------------------------------------------

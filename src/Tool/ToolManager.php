@@ -306,22 +306,6 @@ class ToolManager
 
         // Enqueue jQuery UI et ses dépendances
         wp_enqueue_script('jquery-ui-sortable');
-
-        // Enqueue le script de personnalisation
-        wp_enqueue_script(
-            'wp-debug-toolkit-customizer',
-            WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/dashboard-customizer.js',
-            ['jquery', 'jquery-ui-sortable'],
-            WP_DEBUG_TOOLKIT_VERSION,
-            true
-        );
-
-        // Localiser le script avec les variables et les traductions
-        wp_localize_script('wp-debug-toolkit-customizer', 'wp_debug_toolkit_customizer', [
-            'nonce' => wp_create_nonce('wp_debug_toolkit_customizer'),
-            'saved_text' => __('Modifications enregistrées', 'wp-debug-toolkit'),
-            'user_preferences' => $this->getUserToolPreferences()
-        ]);
     }
 
     /**
@@ -637,7 +621,7 @@ class ToolManager
     /**
      * Récupère les préférences utilisateur pour tous les outils
      */
-    private function getUserToolPreferences(): array
+    public static function getUserToolPreferences(): array
     {
         $preferences = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_tool_preferences', true);
 

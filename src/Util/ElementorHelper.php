@@ -121,4 +121,36 @@ class ElementorHelper
             }
         }
     }
+
+    /**
+     * Obtient l'icône pour un type de widget directement depuis Elementor
+     */
+    public static function getWidgetIcon(string $widgetName): string
+    {
+        if (!class_exists('\Elementor\Plugin')) {
+            return 'eicon-cog';
+        }
+
+        $widgetManager = Plugin::instance()->widgets_manager;
+        $widget = $widgetManager->get_widget_types($widgetName);
+
+        if (!$widget) {
+            return 'eicon-cog';
+        }
+
+        $icon = $widget->get_icon();
+        return empty($icon) ? 'eicon-cog' : $icon;
+    }
+
+    public static function getWidgetTypeLabel(mixed $type)
+    {
+        return match($type) {
+            'header' => __('En-tête', 'wp-debug-toolkit'),
+            'footer' => __('Pied de page', 'wp-debug-toolkit'),
+            '404' => __('Page 404', 'wp-debug-toolkit'),
+            'single' => __('Article', 'wp-debug-toolkit'),
+            'archive' => __('Archive', 'wp-debug-toolkit'),
+            default => $type
+        };
+    }
 }
