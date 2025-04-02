@@ -114,7 +114,7 @@
     display: none;
 }
 
-.elementor-analyzer-table-container .wp-list-table #the-list .posts .show-more-elements {
+.elementor-analyzer-table-container .wp-list-table #the-list .show-more-elements {
     display: inline-block;
     margin-top: 8px;
     padding: 4px 12px;
@@ -128,13 +128,13 @@
     cursor: pointer;
 }
 
-.elementor-analyzer-table-container .wp-list-table #the-list .posts .show-more-elements:hover {
+.elementor-analyzer-table-container .wp-list-table #the-list .show-more-elements:hover {
     color: #ffffff;
     background-color: var(--wp-debug-primary);
     border-color: var(--wp-debug-primary);
 }
 
-.elementor-analyzer-table-container .wp-list-table #the-list .posts .show-more-elements:focus {
+.elementor-analyzer-table-container .wp-list-table #the-list .show-more-elements:focus {
     box-shadow: none;
 }
 

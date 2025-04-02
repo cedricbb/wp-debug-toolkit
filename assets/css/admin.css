@@ -129,8 +129,8 @@
 .wp-debug-toolkit-tool-card-header h4 {
     margin: 0 0 0 8px;
     flex-grow: 1;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .wp-debug-toolkit-tool-card-header .dashicons {
