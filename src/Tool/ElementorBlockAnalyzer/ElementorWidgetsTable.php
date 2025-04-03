@@ -319,17 +319,24 @@ final class ElementorWidgetsTable extends WP_List_Table
 
         if ($count > $initial_display) {
             $remaining = $count - $initial_display;
-            $output .= sprintf(
-                '<a class="show-more-elements" href="#">%s</a>',
-                sprintf(
-                    _n(
-                        'Voir %d élément de plus',
-                        'Voir %d éléments de plus',
-                        $remaining,
-                        'wp-debug-toolkit'
-                    ),
+
+            // Déterminer le message correct en fonction du nombre
+            if ($remaining === 1) {
+                $message = __('Voir 1 élément de plus', 'wp-debug-toolkit');
+            } else {
+                $message = sprintf(
+                /* translators: %d: number of elements */
+                    __('Voir %d éléments de plus', 'wp-debug-toolkit'),
                     $remaining
-                )
+                );
+            }
+
+            $output .= sprintf(
+                '<a class="show-more-elements" href="#" data-count="%d" data-singular="%s" data-plural="%s">%s</a>',
+                $remaining,
+                esc_attr__('Voir 1 élément de plus', 'wp-debug-toolkit'),
+                esc_attr__('Voir %d éléments de plus', 'wp-debug-toolkit'),
+                $message
             );
         }
 

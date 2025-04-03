@@ -166,40 +166,17 @@ $actionUrl = admin_url('admin-ajax.php?action=wp_debug_toolkit_analyze_elementor
                             if (response.success) {
                                 location.reload();
                             } else {
-                                alert('<?php _e('Erreur lors de l\'analyse. Veuillez réessayer.', 'wp-debug-toolkit'); ?>');
+                                alert('Erreur lors de l\'analyse. Veuillez réessayer.');
                                 $button.prop('disabled', false);
                                 $button.find('.dashicons').removeClass('spin');
                             }
                         },
                         error: function() {
-                            alert('<?php _e('Erreur lors de l\'analyse. Veuillez réessayer.', 'wp-debug-toolkit'); ?>');
+                            alert('Erreur lors de l\'analyse. Veuillez réessayer.');
                             $button.prop('disabled', false);
                             $button.find('.dashicons').removeClass('spin');
                         }
                     });
-                });
-
-                // Afficher/masquer les éléments
-                $('.elementor-analyzer-table-container').on('click', '.show-more-elements', function(e) {
-                    e.preventDefault();
-                    var $container = $(this).closest('.elements-container');
-                    $container.find('.hidden-element').show();
-                    $(this).text('<?php _e('Voir moins', 'wp-debug-toolkit'); ?>');
-                    $(this).removeClass('show-more-elements').addClass('show-less-elements');
-                });
-
-                $('.elementor-analyzer-table-container').on('click', '.show-less-elements', function(e) {
-                    e.preventDefault();
-                    var $container = $(this).closest('.elements-container');
-                    $container.find('.hidden-element').hide();
-
-                    var hiddenCount = $container.find('.hidden-element').length;
-                    var text = hiddenCount === 1
-                        ? '<?php _e('Voir 1 élément de plus', 'wp-debug-toolkit'); ?>'
-                        : '<?php echo sprintf(__('Voir %s éléments de plus', 'wp-debug-toolkit'), "' + hiddenCount + '"); ?>';
-
-                    $(this).text(text);
-                    $(this).removeClass('show-less-elements').addClass('show-more-elements');
                 });
             });
         </script>
