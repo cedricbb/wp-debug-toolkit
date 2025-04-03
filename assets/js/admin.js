@@ -1,18 +1,40 @@
 /**
- * Script pour la personnalisation du tableau de bord WP Debug Toolkit
+ * Script principal pour WP Debug Toolkit
  */
 (function($) {
     'use strict';
 
-    // Objet principal du customizer
-    var WPDebugToolkitCustomizer = {
+    // Objet principal pour les fonctionnalités du plugin
+    var WPDebugToolkit = {
         /**
          * Initialisation
          */
         init: function() {
+            // Initialiser les fonctionnalités du tableau de bord si nous sommes sur cette page
+            if ($('.wp-debug-toolkit-dashboard').length) {
+                this.initDashboard();
+            }
+
+            // Initialiser les fonctionnalités de la page paramètres si nous sommes sur cette page
+            if ($('.wp-debug-toolkit-tools-switches').length) {
+                this.initSettings();
+            }
+        },
+
+        /**
+         * Initialise les fonctionnalités du tableau de bord
+         */
+        initDashboard: function() {
             this.initSortable();
-            this.initMetaboxToggles();
-            this.bindEvents();
+            this.bindDashboardEvents();
+        },
+
+        /**
+         * Initialise les fonctionnalités de la page paramètres
+         */
+        initSettings: function() {
+            this.initToolSwitches();
+            this.bindSettingsEvents();
         },
 
         /**
@@ -28,39 +50,22 @@
                 delay: 150,
                 tolerance: 'pointer',
                 update: function(event, ui) {
-                    WPDebugToolkitCustomizer.saveToolsOrder();
+                    WPDebugToolkit.saveToolsOrder();
                 }
             }).disableSelection();
         },
 
         /**
-         * Initialise les toggles pour montrer/cacher des outils
+         * Initialise les switches des outils sur la page paramètres
          */
-        initMetaboxToggles: function() {
-            // Ajouter des icônes de toggle dans les en-têtes d'outils
-            $('.wp-debug-toolkit-tool-card-header').append(
-                '<button class="wp-debug-toolkit-tool-toggle dashicons dashicons-visibility" aria-expanded="true"></button>'
-            );
-
-            // Appliquer l'état sauvegardé (visible/caché) pour chaque outil
-            $('.wp-debug-toolkit-tool-card').each(function() {
-                var toolId = $(this).data('tool-id');
-                var isHidden = WPDebugToolkitCustomizer.getToolUserPreference(toolId, 'hidden');
-
-                if (isHidden) {
-                    $(this).addClass('wp-debug-toolkit-tool-hidden');
-                    $(this).find('.wp-debug-toolkit-tool-toggle')
-                        .removeClass('dashicons-visibility')
-                        .addClass('dashicons-hidden')
-                        .attr('aria-expanded', 'false');
-                }
-            });
+        initToolSwitches: function() {
+            // Déjà géré par le script inline dans settings.php
         },
 
         /**
-         * Lie les événements aux éléments
+         * Lie les événements aux éléments du tableau de bord
          */
-        bindEvents: function() {
+        bindDashboardEvents: function() {
             // Clic sur les toggles d'outils pour montrer/cacher
             $(document).on('click', '.wp-debug-toolkit-tool-toggle', function(e) {
                 e.preventDefault();
@@ -76,54 +81,16 @@
                 $(this).attr('aria-expanded', isHidden ? 'true' : 'false');
 
                 // Sauvegarder la préférence
-                WPDebugToolkitCustomizer.saveToolUserPreference(toolId, 'hidden', !isHidden);
+                WPDebugToolkit.saveToolUserPreference(toolId, 'hidden', !isHidden);
             });
+        },
 
-            // Traitement AJAX complémentaire pour les options d'écran
-            $(document).on('click', '#wp-debug-toolkit-save-screen-options', function(e) {
-                // Ne pas appeler preventDefault() ici pour permettre la soumission du formulaire
-
-                // Collecter les outils actifs pour AJAX
-                var activeTools = {};
-
-                // Parcourir toutes les checkboxes et récupérer leur état
-                $('#wp-debug-toolkit-available-tools input[type="checkbox"]').each(function() {
-                    var toolId = $(this).val();
-
-                    // S'assurer que l'ID est correct
-                    if (!toolId || toolId === "1") {
-                        // Essayer d'extraire l'ID à partir du nom
-                        var nameMatch = $(this).attr('name').match(/wp-debug-toolkit-tool-(.*?)$/);
-                        if (nameMatch && nameMatch[1]) {
-                            toolId = nameMatch[1];
-                        }
-                    }
-
-                    if (toolId && toolId !== "1") {
-                        activeTools[toolId] = $(this).is(':checked');
-                    }
-                });
-
-                // Afficher un feedback visuel
-                WPDebugToolkitCustomizer.showNotification();
-
-                // Log pour debug
-                console.log('Tools to save via AJAX:', activeTools);
-
-                // Envoyer les données via AJAX en parallèle
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: {
-                        action: 'wp_debug_toolkit_save_active_tools',
-                        active_tools: activeTools,
-                        nonce: wp_debug_toolkit_customizer.nonce
-                    },
-                    success: function(response) {
-                        console.log('AJAX response:', response);
-                    }
-                });
-            });
+        /**
+         * Lie les événements aux éléments de la page paramètres
+         */
+        bindSettingsEvents: function() {
+            // Les événements sont déjà gérés par le script inline dans settings.php
+            // et par la soumission du formulaire
         },
 
         /**
@@ -147,7 +114,7 @@
                 success: function(response) {
                     if (response.success) {
                         // Afficher une notification de sauvegarde
-                        WPDebugToolkitCustomizer.showNotification();
+                        WPDebugToolkit.showNotification();
                     }
                 }
             });
@@ -170,7 +137,7 @@
                 success: function(response) {
                     if (response.success) {
                         // Afficher une notification de sauvegarde
-                        WPDebugToolkitCustomizer.showNotification();
+                        WPDebugToolkit.showNotification();
                     }
                 }
             });
@@ -181,7 +148,8 @@
          */
         getToolUserPreference: function(toolId, prefKey) {
             // Cette fonction utilise les préférences chargées côté serveur et injectées dans la page
-            if (typeof wp_debug_toolkit_customizer.user_preferences !== 'undefined' &&
+            if (typeof wp_debug_toolkit_customizer !== 'undefined' &&
+                typeof wp_debug_toolkit_customizer.user_preferences !== 'undefined' &&
                 typeof wp_debug_toolkit_customizer.user_preferences[toolId] !== 'undefined' &&
                 typeof wp_debug_toolkit_customizer.user_preferences[toolId][prefKey] !== 'undefined') {
                 return wp_debug_toolkit_customizer.user_preferences[toolId][prefKey];
@@ -211,10 +179,7 @@
 
     // Initialiser lorsque le document est prêt
     $(document).ready(function() {
-        // Vérifier si nous sommes sur la page du tableau de bord du plugin
-        if ($('.wp-debug-toolkit-dashboard').length) {
-            WPDebugToolkitCustomizer.init();
-        }
+        WPDebugToolkit.init();
     });
 
 })(jQuery);

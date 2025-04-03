@@ -72,7 +72,7 @@ class ElementorBlockAnalyzer extends AbstractTool
             );
             wp_enqueue_script(
                 'elementor-block-analyzer-widget-detail',
-                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/tools/ElementorBlockAnalyzer/elementor-block-analyzer-widget-detail.js',
+                WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/tools/ElementorBlockAnalyzer/elementor-block-analyzer-widget-details.js',
                 ['jquery', 'thickbox', 'postbox'],
                 WP_DEBUG_TOOLKIT_VERSION . '-' . time(),
                 true

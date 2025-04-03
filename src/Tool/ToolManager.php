@@ -2,6 +2,7 @@
 
 namespace WPDebugToolkit\Tool;
 
+use WPDebugToolkit\Admin\Page\Settings;
 use WPDebugToolkit\Core\Plugin;
 use WPDebugToolkit\Tool\ToolInterface;
 
@@ -44,7 +45,6 @@ class ToolManager
 
         // Ajouter les endpoints AJAX
         add_action('wp_ajax_wp_debug_toolkit_save_tools_order', [$this, 'saveToolsOrder']);
-        add_action('wp_ajax_wp_debug_toolkit_save_active_tools', [$this, 'saveActiveTools']);
         add_action('wp_ajax_wp_debug_toolkit_save_tool_preference', [$this, 'saveToolPreference']);
         add_action('wp_ajax_wp_debug_toolkit_get_available_tools', [$this, 'getAvailableTools']);
 
@@ -53,18 +53,6 @@ class ToolManager
 
         // Ajouter des attributs data aux cartes d'outils
         add_action('wp_debug_toolkit_tool_card_attributes', [$this, 'addToolCardAttributes'], 10, 1);
-
-        // Ajouter du contenu aux options d'écran
-        add_action('admin_init', [$this, 'setupScreenOptions']);
-
-        // Options d'écran pour chaque outil
-        add_filter('screen_settings', [$this, 'addScreenOptions'], 10, 2);
-
-        // Traiter la soumission du formulaire d'options d'écran
-        add_action('admin_init', [$this, 'processScreenOptions']);
-
-        // Afficher les notifications administratives
-        add_action('admin_notices', [$this, 'displayAdminNotices']);
     }
 
     /**
@@ -140,89 +128,6 @@ class ToolManager
     }
 
     /**
-     * Configuration des options d'écran
-     */
-    public function setupScreenOptions(): void
-    {
-        // Nous devons connaître le hook de la page pour configurer les options d'écran
-        add_action('toplevel_page_wp-debug-toolkit', [$this, 'setPageHook']);
-        add_action('load-toplevel_page_wp-debug-toolkit', [$this, 'addScreenOptionsTab']);
-    }
-
-    /**
-     * Enregistre le hook de la page
-     */
-    public function setPageHook($hook): void
-    {
-        $this->pageHook = $hook;
-    }
-
-    /**
-     * Ajoute l'onglet des options d'écran
-     */
-    public function addScreenOptionsTab(): void
-    {
-        // Activer les options d'écran pour cette page
-        add_filter('screen_options_show_screen', '__return_true');
-
-        // Obtenir l'objet écran actuel
-        $screen = get_current_screen();
-
-        // Ajouter une aide contextuelle
-        $screen->add_help_tab([
-            'id'      => 'wp-debug-toolkit-help',
-            'title'   => __('Aide', 'wp-debug-toolkit'),
-            'content' => '<p>' . __('Vous pouvez réorganiser les outils par glisser-déposer ou choisir quels outils afficher dans les options d\'écran.', 'wp-debug-toolkit') . '</p>',
-        ]);
-    }
-
-    /**
-     * Traite la soumission du formulaire d'options d'écran
-     */
-    public function processScreenOptions(): void
-    {
-        // Vérifier si nous sommes sur la bonne page et si le formulaire est soumis
-        if (!isset($_POST['wp-debug-toolkit-save-screen-options'])) {
-            return;
-        }
-
-        // Vérifier le nonce
-        if (!isset($_POST['wp_debug_toolkit_screen_options_nonce']) ||
-            !wp_verify_nonce($_POST['wp_debug_toolkit_screen_options_nonce'], 'wp_debug_toolkit_screen_options')) {
-            return;
-        }
-
-        // Récupérer tous les outils disponibles
-        $tools = $this->getAllAvailableTools();
-
-        // Initialiser le tableau des outils actifs à tous désactivés
-        $activeTools = [];
-        foreach ($tools as $toolId => $tool) {
-            $activeTools[$toolId] = false;
-        }
-
-        // Parcourir les outils soumis et les marquer comme actifs
-        foreach ($_POST as $key => $value) {
-            if (strpos($key, 'wp-debug-toolkit-tool-') === 0) {
-                $toolId = $value; // La valeur du champ est maintenant l'ID de l'outil
-                if (isset($tools[$toolId])) {
-                    $activeTools[$toolId] = true;
-                }
-            }
-        }
-
-        // Sauvegarder les préférences
-        update_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', $activeTools);
-
-        // Définir un drapeau pour afficher un message de succès
-        set_transient('wp_debug_toolkit_options_saved', true, 30);
-
-        // Rediriger pour éviter la résoumission du formulaire
-        wp_redirect(add_query_arg('page', 'wp-debug-toolkit', admin_url('admin.php')));
-        exit;
-    }
-
-    /**
      * Affiche les notifications administratives
      */
     public function displayAdminNotices(): void
@@ -246,55 +151,6 @@ class ToolManager
     }
 
     /**
-     * Ajoute des options d'écran personnalisées
-     */
-    public function addScreenOptions($screen_settings, $screen): string
-    {
-        // Vérifier si nous sommes sur la bonne page
-        if ($screen->base !== 'toplevel_page_wp-debug-toolkit') {
-            return $screen_settings;
-        }
-
-        // Récupérer les outils disponibles
-        $tools = $this->getAllAvailableTools();
-
-        // Récupérer les outils actifs pour l'utilisateur
-        $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
-
-        if (!is_array($activeTools)) {
-            $activeTools = [];
-            foreach ($tools as $toolId => $tool) {
-                $activeTools[$toolId] = $tool['active'];
-            }
-        }
-
-        // Créer les options d'écran pour les outils
-        $output = '<form method="post">';
-        $output .= wp_nonce_field('wp_debug_toolkit_screen_options', 'wp_debug_toolkit_screen_options_nonce', true, false);
-        $output .= '<fieldset class="metabox-prefs">';
-        $output .= '<legend>' . __('Outils', 'wp-debug-toolkit') . '</legend>';
-        $output .= '<div id="wp-debug-toolkit-available-tools">';
-
-        foreach ($tools as $toolId => $tool) {
-            $isActive = $activeTools[$toolId] ?? true;
-            $output .= '<label>';
-            $output .= '<input type="checkbox" name="wp-debug-toolkit-tool-' . esc_attr($toolId) . '"';
-            $output .= ' value="' . esc_attr($toolId) . '"' . checked($isActive, true, false) . '>';
-            $output .= ' ' . esc_html($tool['title']);
-            $output .= '</label>';
-        }
-
-        $output .= '</div>';
-        $output .= '<input type="submit" name="wp-debug-toolkit-save-screen-options" id="wp-debug-toolkit-save-screen-options" class="button button-primary" value="';
-        $output .= esc_attr__('Appliquer', 'wp-debug-toolkit');
-        $output .= '">';
-        $output .= '</fieldset>';
-        $output .= '</form>';
-
-        return $screen_settings . $output;
-    }
-
-    /**
      * Enqueue les assets nécessaires
      */
     public function enqueueAssets($hook): void
@@ -306,6 +162,13 @@ class ToolManager
 
         // Enqueue jQuery UI et ses dépendances
         wp_enqueue_script('jquery-ui-sortable');
+
+        // Localiser le script avec les variables et les traductions
+        wp_localize_script('wp-debug-toolkit-admin-js', 'wp_debug_toolkit_customizer', [
+            'nonce' => wp_create_nonce('wp_debug_toolkit_customizer'),
+            'saved_text' => __('Modifications enregistrées', 'wp-debug-toolkit'),
+            'user_preferences' => self::getUserToolPreferences()
+        ]);
     }
 
     /**
@@ -470,7 +333,7 @@ class ToolManager
         $activeTools = isset($_POST['active_tools']) ? (array) $_POST['active_tools'] : [];
 
         // Récupérer tous les outils disponibles
-        $tools = $this->getAllAvailableTools();
+        $tools = self::getAllAvailableTools();
 
         // Initialiser le tableau des outils actifs à tous désactivés
         $sanitizedActiveTools = [];
@@ -546,7 +409,7 @@ class ToolManager
         }
 
         // Récupérer tous les outils (avant le filtrage)
-        $tools = $this->getAllAvailableTools();
+        $tools = self::getAllAvailableTools();
 
         // Récupérer les outils actifs pour l'utilisateur
         $activeTools = get_user_meta(get_current_user_id(), 'wp_debug_toolkit_active_tools', true);
@@ -564,7 +427,7 @@ class ToolManager
     /**
      * Récupère tous les outils disponibles (y compris ceux non chargés)
      */
-    public function getAllAvailableTools(): array
+    public static function getAllAvailableTools(): array
     {
         return apply_filters('wp_debug_toolkit_all_tools', [
             'elementor-block-analyzer' => [
