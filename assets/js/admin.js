@@ -26,7 +26,6 @@
          */
         initDashboard: function() {
             this.initSortable();
-            this.initToolToggles();
             this.bindDashboardEvents();
         },
 
@@ -54,30 +53,6 @@
                     WPDebugToolkit.saveToolsOrder();
                 }
             }).disableSelection();
-        },
-
-        /**
-         * Initialise les toggles pour montrer/cacher des outils
-         */
-        initToolToggles: function() {
-            // Ajouter des icônes de toggle dans les en-têtes d'outils
-            $('.wp-debug-toolkit-tool-card-header').append(
-                '<button class="wp-debug-toolkit-tool-toggle dashicons dashicons-visibility" aria-expanded="true"></button>'
-            );
-
-            // Appliquer l'état sauvegardé (visible/caché) pour chaque outil
-            $('.wp-debug-toolkit-tool-card').each(function() {
-                var toolId = $(this).data('tool-id');
-                var isHidden = WPDebugToolkit.getToolUserPreference(toolId, 'hidden');
-
-                if (isHidden) {
-                    $(this).addClass('wp-debug-toolkit-tool-hidden');
-                    $(this).find('.wp-debug-toolkit-tool-toggle')
-                        .removeClass('dashicons-visibility')
-                        .addClass('dashicons-hidden')
-                        .attr('aria-expanded', 'false');
-                }
-            });
         },
 
         /**
