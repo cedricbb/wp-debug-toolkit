@@ -109,12 +109,5 @@ class Settings extends AbstractPage
             [],
             WP_DEBUG_TOOLKIT_VERSION . '-' . time()
         );
-        // Enqueuejs
-        wp_enqueue_script(
-            'wp-debug-toolkit-settings-js',
-            WP_DEBUG_TOOLKIT_PLUGIN_URL . 'assets/js/settings.js',
-            [],
-            WP_DEBUG_TOOLKIT_VERSION . '-' . time()
-        );
     }
 }

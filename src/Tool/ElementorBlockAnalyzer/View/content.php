@@ -11,10 +11,6 @@ use WPDebugToolkit\Util\ElementorHelper;
 if (!defined('ABSPATH')) {
     exit;
 }
-
-// Obtenir l'instance de l'outil et l'URL d'action
-$nonce = wp_create_nonce('wp_debug_toolkit_' . $this->id . '_action');
-$actionUrl = admin_url('admin-ajax.php?action=wp_debug_toolkit_analyze_elementor_blocks&nonce=' . $nonce);
 ?>
 
 <div class="wrap wp-debug-toolkit-elementor-analyzer">
@@ -66,73 +62,6 @@ $actionUrl = admin_url('admin-ajax.php?action=wp_debug_toolkit_analyze_elementor
 
         <script type="text/javascript">
             jQuery(document).ready(function($) {
-                // Initialiser les contrôles de l'interface
-                $('.elementor-analyzer-content').on('click', '.widget-details-link', function(e) {
-                    e.preventDefault();
-                    var widgetName = $(this).data('widget');
-                    var $modal = $('#elementor-widget-details-modal');
-
-                    $modal.find('.widget-details-loading').show();
-                    $modal.find('.widget-details-content').empty();
-
-                    // Afficher la modal
-                    tb_show(
-                        '<?php _e('Détails du Widget', 'wp-debug-toolkit'); ?>',
-                        '#TB_inline?width=800&height=600&inlineId=elementor-widget-details-modal'
-                    );
-
-                    // Charger les détails
-                    $.ajax({
-                        url: ajaxurl,
-                        data: {
-                            action: 'get_widget_details',
-                            widget: widgetName,
-                            nonce: '<?php echo wp_create_nonce('wp_debug_toolkit_widget_details'); ?>'
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                $modal.find('.widget-details-loading').hide();
-                                $modal.find('.widget-details-content').html(response.data.content);
-
-                                // Si Chart.js est chargé, initialiser le graphique
-                                if (typeof Chart !== 'undefined' && response.data.chartData) {
-                                    var ctx = document.getElementById('widget-usage-chart').getContext('2d');
-                                    new Chart(ctx, {
-                                        type: 'line',
-                                        data: {
-                                            labels: response.data.chartData.labels,
-                                            datasets: [{
-                                                label: '<?php _e('Utilisation par mois', 'wp-debug-toolkit'); ?>',
-                                                data: response.data.chartData.values,
-                                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                                borderColor: 'rgba(54, 162, 235, 1)',
-                                                borderWidth: 1
-                                            }]
-                                        },
-                                        options: {
-                                            scales: {
-                                                y: {
-                                                    beginAtZero: true,
-                                                    ticks: {
-                                                        precision: 0
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-                                }
-                            } else {
-                                $modal.find('.widget-details-loading').hide();
-                                $modal.find('.widget-details-content').html('<p class="error">' + response.data.message + '</p>');
-                            }
-                        },
-                        error: function() {
-                            $modal.find('.widget-details-loading').hide();
-                            $modal.find('.widget-details-content').html('<p class="error"><?php _e('Erreur lors du chargement des détails', 'wp-debug-toolkit'); ?></p>');
-                        }
-                    });
-                });
-
                 // Filtrage de la table
                 $('#filter-by-usage').on('change', function() {
                     var value = $(this).val();
@@ -155,28 +84,7 @@ $actionUrl = admin_url('admin-ajax.php?action=wp_debug_toolkit_analyze_elementor
                 // Actualiser l'analyse
                 $('#refresh-analysis').on('click', function(e) {
                     e.preventDefault();
-                    var $button = $(this);
-
-                    $button.prop('disabled', true);
-                    $button.find('.dashicons').addClass('spin');
-
-                    $.ajax({
-                        url: '<?php echo esc_url($actionUrl); ?>',
-                        success: function(response) {
-                            if (response.success) {
-                                location.reload();
-                            } else {
-                                alert('Erreur lors de l\'analyse. Veuillez réessayer.');
-                                $button.prop('disabled', false);
-                                $button.find('.dashicons').removeClass('spin');
-                            }
-                        },
-                        error: function() {
-                            alert('Erreur lors de l\'analyse. Veuillez réessayer.');
-                            $button.prop('disabled', false);
-                            $button.find('.dashicons').removeClass('spin');
-                        }
-                    });
+                    location.reload();
                 });
             });
         </script>
