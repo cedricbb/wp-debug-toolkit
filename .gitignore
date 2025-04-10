@@ -1,0 +1,6 @@
+/.idea/*
+confidential/.php-cs-fixer.cache
+confidential/.env
+.env
+
+vendor/*
