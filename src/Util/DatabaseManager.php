@@ -9,7 +9,7 @@ final class DatabaseManager
    public function __construct()
    {
     global $wpdb;
-    $this->table = $wpdb->prefix . 'wp_debug_toolkit_api_logs';
+    $this->table = $wpdb->prefix . 'debug_toolkit_api_logs';
    }
 
    public function createTable(): void
@@ -77,5 +77,11 @@ final class DatabaseManager
    {
     global $wpdb;
     $wpdb->query("OPTIMIZE TABLE {$this->table}");
+   }
+
+   public function insert(array $data): bool
+   {
+    global $wpdb;
+    return $wpdb->insert($this->table, $data) !== false;
    }
 }

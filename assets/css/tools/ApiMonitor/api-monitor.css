@@ -1,0 +1,788 @@
+/* Layout général */
+.wp-debug-toolkit-api-monitor {
+    margin: 20px 0;
+}
+
+/* Grille des statistiques */
+.wp-debug-toolkit-api-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* Cards statistiques */
+.wp-debug-toolkit-api-stat-card {
+    background: #fff;
+    border: 1px solid var(--wp-debug-light-gray);
+    border-radius: var(--wp-debug-border-radius);
+    padding: 20px;
+    box-shadow: var(--wp-debug-box-shadow);
+}
+
+.wp-debug-toolkit-api-stat-card .stat-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.wp-debug-toolkit-api-stat-card .stat-header .dashicons {
+    color: var(--wp-debug-primary);
+    margin-right: 10px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+.wp-debug-toolkit-api-stat-card h3 {
+    margin: 0;
+    font-size: 14px;
+    color: var(--wp-debug-dark-gray);
+}
+
+.wp-debug-toolkit-api-stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--wp-debug-dark-gray);
+    margin: 10px 0;
+}
+
+.wp-debug-toolkit-api-stat-card .stat-value .unit {
+    font-size: 16px;
+    color: var(--wp-debug-text);
+    margin-left: 4px;
+}
+
+.wp-debug-toolkit-api-stat-card .stat-footer {
+    font-size: 13px;
+    color: var(--wp-debug-text);
+}
+
+.wp-debug-toolkit-api-stat-card.has-errors {
+    border-left: 4px solid var(--wp-debug-error);
+}
+
+/* Tendances */
+.trend {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: var(--wp-debug-border-radius);
+    margin-left: 8px;
+}
+
+.trend.positive { color: var(--wp-debug-success); }
+.trend.negative { color: var(--wp-debug-error); }
+.trend.neutral { color: var(--wp-debug-text); }
+
+/* Barre d'outils */
+.wp-debug-toolkit-api-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    gap: 20px;
+}
+
+.wp-debug-toolkit-api-filters {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.wp-debug-toolkit-api-filters select {
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.wp-debug-toolkit-api-filters .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--wp-debug-primary);
+    border: 1px solid var(--wp-debug-primary);
+    border-radius: var(--wp-debug-border-radius);
+}
+
+.wp-debug-toolkit-api-filters .button:hover {
+    color: var(--wp-debug-primary);
+    border-color: var(--wp-debug-primary);
+    border-radius: var(--wp-debug-border-radius);
+    background: var(--wp-debug-gray);
+}
+
+.wp-debug-toolkit-api-filters .button:focus {
+    box-shadow: none;
+    color: var(--wp-debug-primary);
+    border-color: var(--wp-debug-primary);
+    background: var(--wp-debug-gray);
+}
+
+.wp-debug-toolkit-api-filters .button .dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: var(--wp-debug-primary);
+}
+
+/* style pour les filtres actifs */
+.wp-debug-toolkit-api-filters select:has(option[selected]:not([value=""])) {
+    border-color: var(--wp-debug-primary);
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+     .wp-debug-toolkit-api-toolbar {
+        flex-direction: column;
+    }
+
+     .wp-debug-toolkit-api-filters {
+        width: 100%;
+        flex-direction: column;
+    }
+
+     .wp-debug-toolkit-api-filters select,
+     .wp-debug-toolkit-api-filters .button {
+        width: 100%;
+    }
+}
+/* Modal de détails */
+.wp-debug-toolkit-api-call-details {
+    padding: 20px;
+}
+
+/* En-tête des détails */
+.wp-debug-toolkit-api-call-details .details-header {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--wp-debug-gray);
+}
+
+.wp-debug-toolkit-api-call-details .details-meta h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 10px 0;
+    font-size: 1.3em;
+}
+
+.wp-debug-toolkit-api-call-details .details-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--wp-debug-text);
+}
+
+/* Badges et statuts */
+.method-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.method-badge.method-get { background: #72aee6; color: #fff; }
+.method-badge.method-post { background: var(--wp-debug-success); color: #fff; }
+.method-badge.method-put { background: var(--wp-debug-warning); color: #fff; }
+.method-badge.method-delete { background: var(--wp-debug-error); color: #fff; }
+.method-badge.method-patch { background: #826eb4; color: #fff; }
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-badge.status-2xx { background: var(--wp-debug-success); color: #fff; }
+.status-badge.status-3xx { background: var(--wp-debug-warning); color: #fff; }
+.status-badge.status-4xx { background: var(--wp-debug-error); color: #fff; }
+.status-badge.status-5xx { background: #810000; color: #fff; }
+
+.response-time {
+    font-weight: 500;
+}
+
+.response-time.slow {
+    color: var(--wp-debug-error);
+}
+
+/* Navigation par onglets */
+.wp-debug-toolkit-api-call-details .details-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--wp-debug-gray);
+    margin-bottom: 20px;
+    padding-bottom: 0;
+}
+
+.wp-debug-toolkit-api-call-details .details-tabs .tab-button {
+    padding: 8px 16px;
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    color: var(--wp-debug-primary);
+    margin-bottom: -1px;
+}
+
+.wp-debug-toolkit-api-call-details .details-tabs .tab-button:hover {
+    background: var(--wp-debug-light-gray);
+    border-color: var(--wp-debug-gray);
+}
+
+.wp-debug-toolkit-api-call-details .details-tabs .tab-button.active {
+    background: var(--wp-debug-light-gray);
+    border-color: var(--wp-debug-gray);
+    border-bottom-color: var(--wp-debug-light-gray);
+    color: var(--wp-debug-text);
+}
+
+/* Contenu des onglets */
+.wp-debug-toolkit-api-call-details .tab-panel {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.wp-debug-toolkit-api-call-details .tab-panel.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Sections de détails */
+.details-section {
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.details-section:last-child {
+    margin-bottom: 0;
+}
+
+.details-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 14px;
+    color: var(--wp-debug-text);
+}
+
+/* Affichage de code */
+.code-display, .url-display {
+    position: relative;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    padding: 15px;
+}
+
+.code-display pre {
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.code-display code {
+    display: block;
+    padding-right: 30px; /* Espace pour le bouton de copie */
+}
+
+/* Bouton de copie */
+.copy-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: 3px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.copy-button:hover {
+    opacity: 1;
+    background: var(--wp-debug-light-gray);
+}
+
+.copy-button.copied {
+    background: var(--wp-debug-success);
+    border-color: var(--wp-debug-success);
+}
+
+.copy-button.copied .dashicons {
+    color: #fff;
+}
+
+/* Tables dans les détails */
+.details-section table.widefat {
+    border: 1px solid var(--wp-debug-gray);
+    border-spacing: 0;
+    width: 100%;
+    clear: both;
+    margin: 0;
+}
+
+.details-section table.widefat th {
+    padding: 8px;
+    text-align: left;
+    line-height: 1.3;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wp-debug-text);
+    background: var(--wp-debug-light-gray);
+}
+
+.details-section table.widefat td {
+    padding: 8px;
+    line-height: 1.3;
+    vertical-align: middle;
+    font-size: 13px;
+    color: var(--wp-debug-text);
+}
+
+.details-section table.widefat tr:nth-child(odd) {
+    background-color: var(--wp-debug-light-gray);
+}
+
+/* État de chargement */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.loading-spinner::after {
+    content: "";
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--wp-debug-gray);
+    border-top-color: var(--wp-debug-primary);
+    border-radius: 50%;
+    animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* Message pas de données */
+.wp-debug-toolkit-api-no-data {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    color: var(--wp-debug-text);
+}
+
+.wp-debug-toolkit-api-no-data .dashicons {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+     .wp-debug-toolkit-api-toolbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+     .wp-debug-toolkit-api-filters {
+        flex-direction: column;
+        width: 100%;
+    }
+
+     .wp-debug-toolkit-api-filters select,
+     .wp-debug-toolkit-api-filters button {
+        width: 100%;
+    }
+
+     .wp-debug-toolkit-api-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+     .details-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+     .details-meta h2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+/* Ajustements pour les longues valeurs */
+
+/* Tables dans les détails */
+.details-section table.widefat {
+    table-layout: fixed; /* Important pour gérer les colonnes de largeur fixe */
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--wp-debug-gray);
+    border-spacing: 0;
+    clear: both;
+}
+
+.details-section table.widefat th {
+    padding: 8px;
+    text-align: left;
+    line-height: 1.3;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wp-debug-text);
+    background: var(--wp-debug-light-gray);
+}
+
+/* Définir des largeurs spécifiques pour les colonnes */
+.details-section table.widefat th:first-child {
+    width: 25%; /* Colonne du nom du header */
+}
+
+.details-section table.widefat td {
+    padding: 8px;
+    line-height: 1.4;
+    vertical-align: top;
+    font-size: 13px;
+    color: var(--wp-debug-text);
+    word-break: break-word; /* Casse les mots longs */
+    overflow-wrap: break-word; /* S'assure que les mots très longs sont coupés */
+    hyphens: auto; /* Ajoute des tirets si nécessaire */
+}
+
+/* Style pour les longues valeurs */
+.details-section table.widefat td pre {
+    margin: 0;
+    white-space: pre-wrap; /* Permet le retour à la ligne */
+    word-wrap: break-word; /* Force la coupure des mots longs */
+    font-family: monospace;
+    font-size: 12px;
+    max-height: 200px; /* Hauteur maximum pour les très longues valeurs */
+    overflow-y: auto; /* Scrollbar si nécessaire */
+}
+
+/* Bloc de code cURL */
+.code-display {
+    position: relative;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    padding: 15px;
+    margin-top: 10px;
+    overflow-x: auto; /* Scrollbar horizontal si nécessaire */
+}
+
+.code-display pre {
+    margin: 0;
+    white-space: pre-wrap; /* Permet le retour à la ligne */
+    word-wrap: break-word; /* Force la coupure des mots longs */
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.4;
+    padding-right: 40px; /* Espace pour le bouton de copie */
+}
+
+.code-display code {
+    display: block;
+}
+
+/* Pour les très longues URLs */
+.url-display {
+    position: relative;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    padding: 15px;
+    margin-top: 10px;
+    overflow-x: auto; /* Scrollbar horizontal si nécessaire */
+}
+
+.url-display code {
+    display: block;
+    word-break: break-all; /* Casse l'URL si nécessaire */
+    padding-right: 40px; /* Espace pour le bouton de copie */
+    line-height: 1.4;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+/* Ajustements de la modal */
+.api-call-details-modal #TB_ajaxContent {
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 80vh !important;
+    overflow-y: auto;
+}
+
+.wp-debug-toolkit-api-call-details {
+    padding: 20px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Pour les cookies et autres valeurs très longues */
+.long-value {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+/* Headers spéciaux qui ne doivent pas être coupés */
+.no-wrap {
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+/* Style pour les valeurs trop longues avec ellipsis */
+.truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.truncate:hover {
+    white-space: normal;
+    word-break: break-all;
+}
+
+/* Ajustements pour le responsive */
+@media screen and (max-width: 782px) {
+     .details-section table.widefat th:first-child {
+        width: 35%; /* Augmenter la largeur de la première colonne sur mobile */
+    }
+
+     .code-display,
+     .url-display {
+        margin: 0 -15px; /* Étendre légèrement hors des marges sur mobile */
+        border-radius: 0;
+    }
+
+     .code-display pre,
+     .url-display code {
+        font-size: 12px; /* Réduire légèrement la taille de la police sur mobile */
+    }
+}
+
+/* Style commun pour tous les boutons d'action */
+.wp-debug-toolkit-api-actions .button,
+.wp-debug-toolkit-api-tab-content .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 30px;
+    padding: 0 10px;
+    vertical-align: middle;
+    color: var(--wp-debug-primary);
+    border: 1px solid var(--wp-debug-primary);
+    border-radius: var(--wp-debug-border-radius);
+}
+
+.wp-debug-toolkit-api-actions .button:hover,
+.wp-debug-toolkit-api-tab-content .button:hover {
+    color: var(--wp-debug-primary);
+    border-color: var(--wp-debug-primary);
+    border-radius: var(--wp-debug-border-radius);
+    background: var(--wp-debug-gray);
+}
+
+.wp-debug-toolkit-api-actions .button:focus,
+.wp-debug-toolkit-api-tab-content .button:focus {
+    box-shadow: none;
+    color: var(--wp-debug-primary);
+    border-color: var(--wp-debug-primary);
+    border-radius: var(--wp-debug-border-radius);
+    background: var(--wp-debug-gray);
+}
+
+.wp-debug-toolkit-api-actions .button .dashicons,
+.view-details .dashicons {
+    width: 16px;
+    height: 16px;
+    padding: 0 10px;
+    vertical-align: middle;
+    color: var(--wp-debug-primary);
+}
+
+/* Style des icônes dans les boutons */
+.wp-debug-toolkit-api-actions .button .dashicons,
+.view-details .dashicons {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    color: var(--wp-debug-primary);
+}
+
+/* Animation du bouton actualiser */
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#refresh-data.rotating .dashicons {
+    animation: rotate 1s linear infinite;
+    display: inline-block;
+}
+
+/* Style du bouton clear pendant le chargement */
+.button.updating-message {
+    position: relative;
+    padding-left: 25px!important;
+    color: #a7aaad!important;
+    cursor: default;
+}
+
+.button.updating-message::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    background: url(../../../images/spinner.svg) no-repeat center;
+    background-size: 16px 16px;
+}
+
+/* Ajustement pour les boutons de la toolbar */
+.wp-debug-toolkit-api-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Petits ajustements pour les boutons dans le tableau */
+.wp-debug-toolkit-api-monitor .wp-list-table .view-details {
+    min-height: 28px;
+}
+
+.wp-debug-toolkit-api-monitor .wp-list-table thead th {
+    padding: 20px 10px;
+}
+
+/* Assurer que le texte est également aligné */
+.button-text,
+.button span {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Resets supplémentaires pour les dashicons */
+.dashicons,
+.dashicons-before:before {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    transition: none;
+}
+
+/* Tabs de navigation */
+.wp-debug-toolkit-api-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #dcdcde;
+    margin: 20px 0;
+    padding-bottom: 0;
+}
+
+.wp-debug-toolkit-api-tabs .tab-button {
+    padding: 8px 16px;
+    background: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    color: var(--wp-debug-text);
+    margin-bottom: -1px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wp-debug-toolkit-api-tabs .tab-button:hover {
+    background: var(--wp-debug-gray);
+    border-color: var(--wp-debug-gray);
+    color: var(--wp-debug-primary);
+}
+
+.wp-debug-toolkit-api-tabs .tab-button.active {
+    background: var(--wp-debug-gray);
+    border-color: var(--wp-debug-gray);
+    border-bottom-color: var(--wp-debug-gray);
+    color: var(--wp-debug-primary);
+    cursor: default;
+}
+
+.wp-debug-toolkit-api-tabs .tab-button:focus {
+    box-shadow: none;
+    background: var(--wp-debug-gray);
+}
+
+/* Badge d'erreur dans les tabs */
+.error-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 9px;
+    background: var(--wp-debug-error);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* Message pas de données */
+.wp-debug-toolkit-api-no-data {
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--wp-debug-light-gray);
+    border: 1px solid var(--wp-debug-gray);
+    border-radius: var(--wp-debug-border-radius);
+    color: var(--wp-debug-text);
+}
+
+.wp-debug-toolkit-api-no-data .dashicons {
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 10px;
+    color: var(--wp-debug-text);
+}
+
+.wp-debug-toolkit-api-no-data p {
+    margin: 0;
+    font-size: 14px;
+}

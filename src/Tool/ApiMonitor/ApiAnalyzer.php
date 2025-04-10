@@ -3,7 +3,7 @@
 namespace WPDebugToolkit\Tool\ApiMonitor;
 
 use JsonException;
-use WP_Debug_Toolkit\Util\DatabaseManager;
+use WPDebugToolkit\Util\DatabaseManager;
 
 final class ApiAnalyzer
 {
