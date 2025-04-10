@@ -13,38 +13,26 @@ use WPDebugToolkit\Tool\AbstractTool;
  */
 class ApiMonitor extends AbstractTool
 {
+    private DatabaseManager $database;
+    private ApiAnalyzer $analyzer;
+    private ApiLogger $logger;
 
-    protected function registerHooks(): void
+    public function __construct()
     {
-        // TODO: Implement registerHooks() method.
+        // Initialiser la base de données
+        $this->database = new DatabaseManager();
+        $this->analyzer = new ApiAnalyzer($this->database);
+        $this->logger = new ApiLogger($this->database);
+
+        // Appeler le constructeur parent
+        parent::__construct();
+
+        // Initialiser les hooks
+        $this->initHooks();
     }
 
-    protected function getDefaultId(): string
+    private function initHooks(): void
     {
-        // TODO: Implement getDefaultId() method.
-        return 'api-monitor';
-    }
-
-    protected function getDefaultTitle(): string
-    {
-        // TODO: Implement getDefaultTitle() method.
-        return 'Moniteur d\'API';
-    }
-
-    protected function getDefaultDescription(): string
-    {
-        // TODO: Implement getDefaultDescription() method.
-        return '';
-    }
-
-    protected function getDefaultIcon(): string
-    {
-        // TODO: Implement getDefaultIcon() method.
-        return 'dashicons-rest-api';
-    }
-
-    public function renderContent(): void
-    {
-        // TODO: Implement renderContent() method.
+        // TODO: Implement initHooks() method.
     }
 }
